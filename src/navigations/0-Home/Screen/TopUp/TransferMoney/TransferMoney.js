@@ -19,9 +19,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: 30,
-        // alignItems: 'center',
-        // justifyContent: 'center',
-        // backgroundColor: 'green',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'green',
     },
     button: {
         backgroundColor: COLORS.APP_COLORS,
