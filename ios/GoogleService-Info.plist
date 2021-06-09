@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>553729826531-qnec0vp3gd612i55gnvsdnj4mgrjm2re.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.553729826531-qnec0vp3gd612i55gnvsdnj4mgrjm2re</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>553729826531-860vtd9mjrlv90gt310cbr00iknchm7o.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDOAMHZz0KGx-Yj6b32aVIJ0hMrMNRw3D0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>553729826531</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.zkit</string>
+	<key>PROJECT_ID</key>
+	<string>hallowed-ridge-180209</string>
+	<key>STORAGE_BUCKET</key>
+	<string>hallowed-ridge-180209.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:553729826531:ios:3741a6779777379ad82fd6</string>
+	<key>DATABASE_URL</key>
+	<string>https://hallowed-ridge-180209.firebaseio.com</string>
+</dict>
+</plist>

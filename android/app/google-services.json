@@ -1,0 +1,207 @@
+{
+  "project_info": {
+    "project_number": "553729826531",
+    "firebase_url": "https://hallowed-ridge-180209.firebaseio.com",
+    "project_id": "hallowed-ridge-180209",
+    "storage_bucket": "hallowed-ridge-180209.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:553729826531:android:59733b29856e6c1cd82fd6",
+        "android_client_info": {
+          "package_name": "com.zkit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "553729826531-112po2kek3g3cn7mb6i3qso9hovkenpb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNwD-qXLGw0U0fd4v_RWZH8ZFegD3u1RM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "553729826531-112po2kek3g3cn7mb6i3qso9hovkenpb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "553729826531-9eg26bj13gaq2q459cd56s0ljq30k853.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.zyanvet"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:553729826531:android:bfef2199e160c0e7",
+        "android_client_info": {
+          "package_name": "com.zyannotify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "553729826531-860vtd9mjrlv90gt310cbr00iknchm7o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zyannotify",
+            "certificate_hash": "605b5c6aa6aa95e164561e33d327cf17d84cce96"
+          }
+        },
+        {
+          "client_id": "553729826531-112po2kek3g3cn7mb6i3qso9hovkenpb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNwD-qXLGw0U0fd4v_RWZH8ZFegD3u1RM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "553729826531-112po2kek3g3cn7mb6i3qso9hovkenpb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "553729826531-9eg26bj13gaq2q459cd56s0ljq30k853.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.zyanvet"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:553729826531:android:87db37277cd7499d",
+        "android_client_info": {
+          "package_name": "com.zyanvet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "553729826531-g6d7ulphgct43licgm40k038lah9qdul.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zyanvet",
+            "certificate_hash": "e57e9ad1fba65a9140d3a36551d515f2f21acb87"
+          }
+        },
+        {
+          "client_id": "553729826531-112po2kek3g3cn7mb6i3qso9hovkenpb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNwD-qXLGw0U0fd4v_RWZH8ZFegD3u1RM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "553729826531-112po2kek3g3cn7mb6i3qso9hovkenpb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "553729826531-9eg26bj13gaq2q459cd56s0ljq30k853.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.zyanvet"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:553729826531:android:34b6bcef4d175ae6d82fd6",
+        "android_client_info": {
+          "package_name": "com.zyanwoa.beefnotify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "553729826531-112po2kek3g3cn7mb6i3qso9hovkenpb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNwD-qXLGw0U0fd4v_RWZH8ZFegD3u1RM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "553729826531-112po2kek3g3cn7mb6i3qso9hovkenpb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "553729826531-9eg26bj13gaq2q459cd56s0ljq30k853.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.zyanvet"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:553729826531:android:1fecb75b1ddb393fd82fd6",
+        "android_client_info": {
+          "package_name": "com.zyanwoa.rds"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "553729826531-112po2kek3g3cn7mb6i3qso9hovkenpb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNwD-qXLGw0U0fd4v_RWZH8ZFegD3u1RM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "553729826531-112po2kek3g3cn7mb6i3qso9hovkenpb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "553729826531-9eg26bj13gaq2q459cd56s0ljq30k853.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.zyanvet"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
