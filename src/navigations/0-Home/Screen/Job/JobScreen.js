@@ -13,32 +13,16 @@ export default function JobScreen(props) {
             <View style={{ marginTop: 20, paddingHorizontal: 15 }}>
                 <TouchableHighlight
                     underlayColor="null"
-                    onPress={() => console.log('1')}>
+                    onPress={() => props.navigation.navigate('TrakingScreen')}>
                     <View style={styles.box}>
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                // alignItems: 'center',
-                                paddingHorizontal: 20,
-                            }}>
-                            <View
-                                style={{
-                                    flex: 0.5,
-                                    alignItems: 'flex-start',
-                                    marginVertical: 5,
-                                }}>
+                        <View style={styles.row}>
+                            <View style={styles.flexStart}>
                                 <Text style={styles.font}>ชื่อ</Text>
                                 <Text style={styles.font}>เบอร์</Text>
                                 <Text style={styles.font}>สถานะ</Text>
                                 <Text style={styles.font}>ที่อยู่</Text>
                             </View>
-                            <View
-                                style={{
-                                    flex: 0.5,
-                                    alignItems: 'flex-end',
-                                    marginVertical: 5,
-                                }}>
+                            <View style={styles.flexEnd}>
                                 <Text style={styles.font}>
                                     นพนรรณ์ เลิศนันทพร
                                 </Text>
@@ -47,7 +31,7 @@ export default function JobScreen(props) {
                                     ยังไม่ได้รับสินค้า
                                 </Text>
                                 <Text style={styles.font}>
-                                    999/99 บ้านขามเรียง กันทรวิชัย มหาสาารคาม
+                                    999/99 บ้านขามเรียง กันทรวิชัย มหาสารคาม
                                 </Text>
                             </View>
                         </View>
@@ -82,4 +66,16 @@ const styles = StyleSheet.create({
         fontSize: FONT_SIZES['500'],
         color: 'white',
     },
+    row: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        // alignItems: 'center',
+        paddingHorizontal: 20,
+    },
+    flexStart: {
+        flex: 0.5,
+        alignItems: 'flex-start',
+        marginVertical: 5,
+    },
+    flexEnd: { flex: 0.5, alignItems: 'flex-end', marginVertical: 5 },
 });

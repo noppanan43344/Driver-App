@@ -6,6 +6,8 @@ import Job from './Screen/Job/JobScreen';
 import TopUp from './Screen/TopUp/TopUpScreen';
 import TopUpHistory from './Screen/TopUpHistory/TopUpHistory';
 import TransferMoney from './Screen/TopUp/TransferMoney/TransferMoney';
+import Traking from './Screen/Job/Traking/TrakingScreen';
+import Profile from './Screen/Profile/Profile';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
 const Stack = createStackNavigator();
 
@@ -49,11 +51,33 @@ export default AuthTabs = () => {
                         fontFamily: FONT_BOLD,
                     },
                 }}></Stack.Screen>
+                <Stack.Screen
+                name="ProfileScreen"
+                component={Profile}
+                options={{
+                    title: 'ข้อมูลส่วนตัว',
+                    headerStyle: { backgroundColor: COLORS.APP_COLORS },
+                    headerTintColor: 'white',
+                    headerTitleStyle: {
+                        fontFamily: FONT_BOLD,
+                    },
+                }}></Stack.Screen>
             <Stack.Screen
                 name="TransferMoneyScreen"
                 component={TransferMoney}
                 options={{
                     title: 'แจ้งโอนเงิน',
+                    headerStyle: { backgroundColor: COLORS.APP_COLORS },
+                    headerTintColor: 'white',
+                    headerTitleStyle: {
+                        fontFamily: FONT_BOLD,
+                    },
+                }}></Stack.Screen>
+            <Stack.Screen
+                name="TrakingScreen"
+                component={Traking}
+                options={{
+                    title: 'เส้นทาง',
                     headerStyle: { backgroundColor: COLORS.APP_COLORS },
                     headerTintColor: 'white',
                     headerTitleStyle: {

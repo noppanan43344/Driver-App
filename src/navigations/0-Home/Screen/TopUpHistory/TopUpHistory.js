@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     },
     status: {
         backgroundColor: 'red',
-        width: 120,
+        width: 100,
         alignItems: 'center',
     },
     fontStatus: {

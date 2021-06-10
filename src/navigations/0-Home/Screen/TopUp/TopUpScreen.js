@@ -13,7 +13,7 @@ export default function TopUpScreen(props) {
         <ScrollView>
             <View>
                 <View style={{ flexDirection: 'row' }}>
-                    <View style={{ flex: 0.5 }}>
+                    <View style={{ flex: 0.5, alignItems: 'center' }}>
                         <TouchableHighlight
                             underlayColor="null"
                             onPress={() =>
@@ -41,7 +41,7 @@ export default function TopUpScreen(props) {
                             <Text style={styles.fontIcon}>409-404XXX-X</Text>
                         </View>
                     </View>
-                    <View style={{ flex: 0.5 }}>
+                    <View style={{ flex: 0.5, alignItems: 'center' }}>
                         <View style={styles.box}>
                             <Image
                                 style={styles.imageIcon}
@@ -60,8 +60,8 @@ const styles = StyleSheet.create({
     box: {
         backgroundColor: '#FFF',
         borderRadius: 20,
-        width: 160,
-        height: 160,
+        width: 140,
+        height: 150,
         margin: 20,
         justifyContent: 'center',
         alignItems: 'center',
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     },
     fontIcon: {
         fontFamily: FONT_MED,
-        fontSize: FONT_SIZES['400'],
+        fontSize: FONT_SIZES['300'],
         color: 'black',
     },
 

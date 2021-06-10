@@ -8,16 +8,38 @@ import {
     TouchableHighlight,
 } from 'react-native';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
-import CardMenu from '../../components/Card/CardMenu';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 export default function index(props) {
     return (
         <View style={styles.container}>
             <View style={styles.view}>
-                <Image
-                    style={styles.tinyLogo}
-                    source={require('../../assets/images/react.jpg')}
-                />
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        marginTop: 15,
+                    }}>
+                    <TouchableHighlight
+                        underlayColor="null"
+                        onPress={() => {
+                            console.log('1');
+                        }}>
+                        <Icon name="bars" size={30} color="black"></Icon>
+                    </TouchableHighlight>
+                    <TouchableHighlight
+                        underlayColor="null"
+                        onPress={() =>
+                            props.navigation.navigate('ProfileScreen')
+                        }>
+                        <Icon name="pencil" size={30} color="black"></Icon>
+                    </TouchableHighlight>
+                </View>
+                <View style={{ alignItems: 'center' }}>
+                    <Image
+                        style={styles.tinyLogo}
+                        source={require('../../assets/images/logo.png')}
+                    />
+                </View>
                 <View style={{ flexDirection: 'row-reverse' }}>
                     <Text style={styles.font}>ยอดคงเหลือ 10.00 บาท</Text>
                 </View>
@@ -31,9 +53,10 @@ export default function index(props) {
                                 alignItems: 'center',
                             }}>
                             <View style={{ flexDirection: 'row' }}>
-                                <View style={{ flex: 0.5 }}>
+                                <View
+                                    style={{ flex: 0.5, alignItems: 'center' }}>
                                     <TouchableHighlight
-                                        underlayColor="white"
+                                        underlayColor="null"
                                         onPress={() =>
                                             props.navigation.navigate(
                                                 'JobScreen',
@@ -42,7 +65,7 @@ export default function index(props) {
                                         <View style={styles.box}>
                                             <Image
                                                 style={styles.imageIcon}
-                                                source={require('../../assets/images/react.jpg')}
+                                                source={require('../../assets/images/quality.png')}
                                             />
                                             <Text style={styles.fontIcon}>
                                                 สินค้าที่จะส่ง
@@ -50,7 +73,7 @@ export default function index(props) {
                                         </View>
                                     </TouchableHighlight>
                                     <TouchableHighlight
-                                        underlayColor="white"
+                                        underlayColor="null"
                                         onPress={() =>
                                             props.navigation.navigate(
                                                 'TopUpHistoryScreen',
@@ -59,7 +82,7 @@ export default function index(props) {
                                         <View style={styles.box}>
                                             <Image
                                                 style={styles.imageIcon}
-                                                source={require('../../assets/images/react.jpg')}
+                                                source={require('../../assets/images/clock.png')}
                                             />
                                             <Text style={styles.fontIcon}>
                                                 ประวัติการโอน
@@ -67,9 +90,10 @@ export default function index(props) {
                                         </View>
                                     </TouchableHighlight>
                                 </View>
-                                <View style={{ flex: 0.5 }}>
+                                <View
+                                    style={{ flex: 0.5, alignItems: 'center' }}>
                                     <TouchableHighlight
-                                        underlayColor="white"
+                                        underlayColor="null"
                                         onPress={() =>
                                             props.navigation.navigate(
                                                 'TopUpScreen',
@@ -78,7 +102,7 @@ export default function index(props) {
                                         <View style={styles.box}>
                                             <Image
                                                 style={styles.imageIcon}
-                                                source={require('../../assets/images/react.jpg')}
+                                                source={require('../../assets/images/debit-card.png')}
                                             />
                                             <Text style={styles.fontIcon}>
                                                 เติมเงิน
@@ -108,11 +132,11 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     view: {
-        paddingHorizontal: 30,
+        paddingHorizontal: 15,
     },
     tinyLogo: {
         height: 220,
-        width: '100%',
+        width: 220,
         borderRadius: 20,
         marginTop: 50,
     },
@@ -125,21 +149,21 @@ const styles = StyleSheet.create({
     fontIcon: {
         marginTop: 10,
         fontFamily: FONT_MED,
-        fontSize: FONT_SIZES['500'],
+        fontSize: FONT_SIZES['400'],
         color: 'black',
     },
     box: {
         backgroundColor: '#FFF',
         borderRadius: 20,
-        width: 160,
-        height: 160,
+        width: 140,
+        height: 140,
         margin: 20,
         justifyContent: 'center',
         alignItems: 'center',
         elevation: 7,
     },
     imageIcon: {
-        height: 90,
-        width: 90,
+        height: 80,
+        width: 80,
     },
 });
