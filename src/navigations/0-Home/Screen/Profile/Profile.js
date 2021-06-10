@@ -8,8 +8,10 @@ import {
 } from 'react-native';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
-export default function TransferMoney(props) {
-    const [money, setMoney] = useState('');
+export default function Profile() {
+    const [name, setName] = useState('นพนรรณ์ เลิศนันทพร');
+    const [phone, setPhone] = useState('0940342997');
+    const [password, setPassword] = useState('**********');
     return (
         <View style={styles.container}>
             <View style={styles.text}>
@@ -19,12 +21,12 @@ export default function TransferMoney(props) {
                         alignItems: 'center',
                         // justifyContent: 'c',
                     }}>
-                    <Icon name="money" size={30} color="black" />
+                    <Icon name="user-circle-o" size={30} color="black" />
                     <TextInput
                         style={styles.textInput}
-                        onChangeText={setMoney}
-                        value={money}
-                        placeholder="จำนวนเงิน"
+                        onChangeText={setName}
+                        value={name}
+                        placeholder="ชื่อ - สกุล"
                     />
                 </View>
             </View>
@@ -35,29 +37,30 @@ export default function TransferMoney(props) {
                         alignItems: 'center',
                         // justifyContent: 'c',
                     }}>
-                    <Icon name="money" size={30} color="black" />
+                    <Icon name="phone" size={30} color="black" />
                     <TextInput
                         style={styles.textInput}
-                        onChangeText={setMoney}
-                        value={money}
-                        placeholder="จำนวนเงิน"
-                    />
-                </View>
-            </View>
-            <View style={styles.text}>
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        // justifyContent: 'c',
-                    }}>
-                    <Icon name="money" size={30} color="black" />
-                    <TextInput
-                        style={styles.textInput}
-                        onChangeText={setMoney}
-                        value={money}
+                        onChangeText={setPhone}
+                        value={phone}
                         keyboardType="numeric"
-                        placeholder="จำนวนเงิน"
+                        placeholder="เบอร์โทรศัพท์"
+                    />
+                </View>
+            </View>
+            <View style={styles.text}>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        // justifyContent: 'c',
+                    }}>
+                    <Icon name="lock" size={30} color="black" />
+                    <TextInput
+                        style={styles.textInput}
+                        onChangeText={setPassword}
+                        value={password}
+                        secureTextEntry={true}
+                        placeholder="รหัสผ่าน"
                     />
                 </View>
             </View>
@@ -65,7 +68,7 @@ export default function TransferMoney(props) {
                 underlayColor="null"
                 onPress={() => console.log('Check In')}>
                 <View style={styles.button}>
-                    <Text style={styles.font}>ยืนยันการโอน</Text>
+                    <Text style={styles.font}>บันทึก</Text>
                 </View>
             </TouchableHighlight>
         </View>
@@ -83,7 +86,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         width: '100%',
         alignItems: 'center',
-        paddingHorizontal: '30%',
+        paddingHorizontal: '40%',
     },
     font: {
         fontFamily: FONT_BOLD,

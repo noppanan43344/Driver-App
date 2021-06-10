@@ -6,6 +6,7 @@ import {
     StyleSheet,
     StatusBar,
     ScrollView,
+    TextInput,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { PrimaryButton } from '@components/Button';
@@ -45,35 +46,41 @@ export default function AuthScreen(props) {
                 <View style={styles.container}>
                     <Image
                         style={styles.tinyLogo}
-                        source={require('../../assets/images/react.jpg')}
+                        source={require('../../assets/images/logo.png')}
                     />
-                    <Input
-                        placeholder="Username"
-                        leftIcon={
-                            <Icon
-                                name="user"
-                                size={24}
-                                color="black"
-                                style={{ margin: 10 }}
+                    <View style={styles.text}>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                // justifyContent: 'c',
+                            }}>
+                            <Icon name="user" size={30} color="black" />
+                            <TextInput
+                                style={styles.textInput}
+                                onChangeText={setUsername}
+                                value={username}
+                                placeholder="Username"
                             />
-                        }
-                        onChangeText={setUsername}
-                        value={username}
-                    />
-                    <Input
-                        placeholder="Password"
-                        leftIcon={
-                            <Icon
-                                name="lock"
-                                size={24}
-                                color="black"
-                                style={{ margin: 10 }}
+                        </View>
+                    </View>
+                    <View style={styles.text}>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                // justifyContent: 'c',
+                            }}>
+                            <Icon name="lock" size={30} color="black" />
+                            <TextInput
+                                style={styles.textInput}
+                                onChangeText={setPassword}
+                                value={password}
+                                secureTextEntry={true}
+                                placeholder="Password"
                             />
-                        }
-                        onChangeText={setPassword}
-                        value={password}
-                        secureTextEntry={true}
-                    />
+                        </View>
+                    </View>
                     <View style={styles.buttons}>
                         <PrimaryButton
                             titleStyle={{
@@ -104,13 +111,30 @@ const styles = StyleSheet.create({
     },
     buttons: {
         width: '100%',
-        marginTop: 50,
+        marginTop: 30,
     },
     tinyLogo: {
-        height: 250,
-        width: '100%',
+        height: 230,
+        width: 230,
         borderRadius: 20,
         marginBottom: 100,
         marginTop: 50,
+    },
+    text: {
+        backgroundColor: COLORS.TEXTFILED,
+        borderRadius: 50,
+        width: '100%',
+        paddingLeft: 20,
+        marginBottom: 20,
+    },
+    textInput: {
+        fontFamily: FONT_BOLD,
+        fontSize: FONT_SIZES['500'],
+        color: 'black',
+        borderBottomWidth: 0,
+        paddingHorizontal: 15,
+        width: '80%',
+        height: 55,
+        // justifyContent: 'center',
     },
 });
