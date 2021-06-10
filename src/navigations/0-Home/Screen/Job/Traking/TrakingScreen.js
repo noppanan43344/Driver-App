@@ -10,7 +10,7 @@ import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
 export default function TrakingScreen() {
     return (
         <View style={{ flex: 1, flexDirection: 'column' }}>
-            <View style={{ flex: 0.65, backgroundColor: 'red' }}>
+            <View style={{ flex: 0.65, backgroundColor: COLORS.APP_COLORS }}>
                 <Text>1</Text>
             </View>
 
