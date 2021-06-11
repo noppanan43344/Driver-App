@@ -7,7 +7,7 @@ import {
     StyleSheet,
 } from 'react-native';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
-export default function TrakingScreen() {
+export default function TrakingScreen(props) {
     return (
         <View style={{ flex: 1, flexDirection: 'column' }}>
             <View style={{ flex: 0.65, backgroundColor: COLORS.APP_COLORS }}>
@@ -19,7 +19,9 @@ export default function TrakingScreen() {
                     <View style={{ marginTop: 20, paddingHorizontal: 15 }}>
                         <TouchableHighlight
                             underlayColor="null"
-                            onPress={() => console.log('1')}>
+                            onPress={() =>
+                                props.navigation.navigate('SingUpScreen')
+                            }>
                             <View style={styles.box}>
                                 <View style={styles.row}>
                                     <View style={styles.flexStart}>
