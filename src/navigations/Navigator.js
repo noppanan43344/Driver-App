@@ -1,7 +1,7 @@
 import { createSwitchNavigator } from '@react-navigation/compat';
 import LoadingScreen from '@components/Loading';
 import AuthStack from './1-Auth/AuthStack';
-import HomeStack from './0-Home/HomeStack';
+import HomeStack from './0-Home/HomeDrawer';
 const RootSwitch = createSwitchNavigator({
     LoadingScreen,
     AuthStack,
