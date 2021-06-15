@@ -11,8 +11,7 @@ import {
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { ImagePicker, launchImageLibrary } from 'react-native-image-picker';
-
-export default function Profile() {
+export default function Profile(props) {
     const [name, setName] = useState('นพนรรณ์ เลิศนันทพร');
     const [phone, setPhone] = useState('0940342997');
     const [password, setPassword] = useState('**********');

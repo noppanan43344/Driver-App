@@ -1,7 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import TransferMoney from './TopUp/TransferMoney/TransferMoney'
-import Traking from './Job/Traking/TrakingScreen';
 import SingUp from './Job/Traking/SingUp/SingUpScreen';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
 
@@ -35,3 +34,4 @@ export default MainStack = () => {
         </Stack.Navigator>
     );
 };
+

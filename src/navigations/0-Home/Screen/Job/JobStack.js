@@ -4,9 +4,12 @@ import Job from './JobScreen';
 import SingUp from './Traking/SingUp/SingUpScreen';
 import Traking from './Traking/TrakingScreen';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Button } from 'react-native';
+
 const Stack = createStackNavigator();
 
-export default StackJob = (props) => {
+export default JobStack = (props) => {
     return (
         <Stack.Navigator>
             <Stack.Screen
@@ -19,6 +22,16 @@ export default StackJob = (props) => {
                     headerTitleStyle: {
                         fontFamily: FONT_BOLD,
                     },
+                    headerLeft: () => (
+                        <Icon
+                            name="arrow-left"
+                            type="font-awesome"
+                            color="white"
+                            size={20}
+                            style={{ marginHorizontal: 20 }}
+                            onPress={() => StackActions.pop(1)}
+                        />
+                    ),
                 }}></Stack.Screen>
             <Stack.Screen
                 name="TrakingScreen"

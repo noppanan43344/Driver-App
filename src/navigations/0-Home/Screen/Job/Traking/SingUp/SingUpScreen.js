@@ -7,14 +7,14 @@ import {
     Image,
 } from 'react-native';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
-import { launchImageLibrary } from 'react-native-image-picker';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import Signature from 'react-native-signature-canvas';
 export default function SingUpScreen({ onOK }) {
     const [response, setResponse] = useState(null);
     const [signature, setSign] = useState(null);
     const handleSignature = (signature) => {
         console.log(signature);
-        console.log(response.assets[0].uri);
+        // console.log(response.assets[0].uri);
         setSign(signature);
     };
 
@@ -32,10 +32,12 @@ export default function SingUpScreen({ onOK }) {
                 <TouchableHighlight
                     underlayColor="null"
                     onPress={() =>
-                        launchImageLibrary(
+                        launchCamera(
                             {
                                 mediaType: 'photo',
                                 includeBase64: false,
+                                maxHeight: 200,
+                                maxWidth: 200,
                             },
                             (response) => {
                                 if (response.didCancel) {
@@ -52,12 +54,13 @@ export default function SingUpScreen({ onOK }) {
                                     );
                                     Alert.alert(response.customButton);
                                 } else {
+                                    console.log(response);
                                     setResponse(response);
                                 }
                             },
                         )
                     }>
-                    {response ? (
+                    {response != null ? (
                         <Image
                             style={styles.image}
                             source={{ uri: response.assets[0].uri }}
@@ -78,18 +81,6 @@ export default function SingUpScreen({ onOK }) {
                         confirmText="Save"
                     />
                 </View>
-                {/* <TouchableHighlight
-                underlayColor="null"
-                onPress={() => {
-                    console.log('X');
-                    console.log(signature);
-                    // console.log(response.assets[0].uri);
-                    // console.log(selectedValue);
-                    // console.log(time);
-                    // console.log(money);
-                }}>
-               
-            </TouchableHighlight> */}
             </View>
         </ScrollView>
     );
