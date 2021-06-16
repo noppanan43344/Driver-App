@@ -6,7 +6,7 @@ import { withTheme } from 'react-native-elements';
 
 function HeaderDefalut(props) {
     const { theme } = props;
-    console.log(theme.colors.black);
+    // console.log(theme.colors.black);
     return (
         <Header
             {...props}

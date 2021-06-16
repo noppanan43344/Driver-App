@@ -121,10 +121,9 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     singUp: {
-        width: 220,
-        height: 220,
+        width: 230,
+        height: 230,
         borderWidth: 2,
-        // borderRadius: 20,
         marginBottom: 30,
     },
     preview: {

@@ -5,7 +5,7 @@ import SingUp from './Traking/SingUp/SingUpScreen';
 import Traking from './Traking/TrakingScreen';
 const Stack = createStackNavigator();
 
-export default JobStack = ({ navigation }) => {
+export default JobStack = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen

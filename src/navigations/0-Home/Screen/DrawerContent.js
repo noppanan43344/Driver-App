@@ -18,11 +18,12 @@ export function DrawerContent(props) {
         <View style={{ flex: 1 }}>
             <View
                 style={{
-                    flex: 0.4,
+                    flex: 0.45,
                     backgroundColor: COLORS.APP_COLORS,
                     flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
+                    marginTop: 20,
                 }}>
                 <Image
                     style={styles.tinyLogo}

@@ -5,7 +5,7 @@ import TransferMoney from './TransferMoney/TransferMoneyScreen';
 
 const Stack = createStackNavigator();
 
-export default StackTopUp = ({ navigation }) => {
+export default StackTopUp = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen

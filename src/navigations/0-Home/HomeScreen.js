@@ -8,30 +8,28 @@ import {
     TouchableHighlight,
 } from 'react-native';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { Header } from 'react-native-elements';
+
 export default function index(props) {
     return (
         <View style={styles.container}>
+            <Header
+                leftComponent={{
+                    icon: 'menu',
+                    color: '#000',
+                    size: 35,
+                    onPress: () => props.navigation.openDrawer(),
+                }}
+                rightComponent={{
+                    icon: 'edit',
+                    color: '#000',
+                    size: 35,
+                    onPress: () => props.navigation.navigate('ProfileScreen'),
+                }}
+                backgroundColor="white"
+                // elevation={20}
+            />
             <View style={styles.view}>
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        marginTop: 15,
-                    }}>
-                    <TouchableHighlight
-                        underlayColor="null"
-                        onPress={() => props.navigation.openDrawer()}>
-                        <Icon name="bars" size={30} color="black"></Icon>
-                    </TouchableHighlight>
-                    <TouchableHighlight
-                        underlayColor="null"
-                        onPress={() =>
-                            props.navigation.navigate('ProfileScreen')
-                        }>
-                        <Icon name="pencil" size={30} color="black"></Icon>
-                    </TouchableHighlight>
-                </View>
                 <View style={{ alignItems: 'center' }}>
                     <Image
                         style={styles.tinyLogo}
@@ -52,7 +50,10 @@ export default function index(props) {
                             }}>
                             <View style={{ flexDirection: 'row' }}>
                                 <View
-                                    style={{ flex: 0.5, alignItems: 'center' }}>
+                                    style={{
+                                        flex: 0.5,
+                                        alignItems: 'center',
+                                    }}>
                                     <TouchableHighlight
                                         underlayColor="null"
                                         onPress={() =>
@@ -89,7 +90,10 @@ export default function index(props) {
                                     </TouchableHighlight>
                                 </View>
                                 <View
-                                    style={{ flex: 0.5, alignItems: 'center' }}>
+                                    style={{
+                                        flex: 0.5,
+                                        alignItems: 'center',
+                                    }}>
                                     <TouchableHighlight
                                         underlayColor="null"
                                         onPress={() =>

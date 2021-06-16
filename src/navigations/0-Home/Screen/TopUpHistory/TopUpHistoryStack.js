@@ -4,7 +4,7 @@ import TopUpHistory from './TopUpHistoryScreen';
 
 const Stack = createStackNavigator();
 
-export default TopUpHistoryStack = ({ navigation }) => {
+export default TopUpHistoryStack = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen

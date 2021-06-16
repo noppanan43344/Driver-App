@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Profile from './ProfileScreen';
 const Stack = createStackNavigator();
 
-export default ProfileStack = ({ navigation }) => {
+export default ProfileStack = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen

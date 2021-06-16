@@ -47,14 +47,13 @@ export default function TransferMoney(props) {
 
     return (
         <ScrollView>
-             <Header
-                    title="ข้อมูลการโอน"
-                    leftComponent={
-                        <BackButton onPress={() => props.navigation.goBack()} />
-                    }
-                />
+            <Header
+                title="ข้อมูลการโอน"
+                leftComponent={
+                    <BackButton onPress={() => props.navigation.goBack()} />
+                }
+            />
             <View style={styles.container}>
-           
                 <TouchableHighlight
                     underlayColor="null"
                     onPress={() =>
@@ -101,19 +100,11 @@ export default function TransferMoney(props) {
                         style={{
                             flexDirection: 'row',
                             alignItems: 'center',
-                            // justifyContent: 'c',
                         }}>
                         <Icon name="university" size={30} color="black" />
                         <Picker
                             selectedValue={selectedValue}
-                            style={{
-                                height: 55,
-                                width: 300,
-                                fontSize: 50,
-                                color: 'COLORS.Gray1',
-                                fontFamily: FONT_BOLD,
-                                fontSize: FONT_SIZES['600'],
-                            }}
+                            style={styles.fontDate}
                             onValueChange={(itemValue, itemIndex) =>
                                 setSelectedValue(itemValue)
                             }>
@@ -136,7 +127,11 @@ export default function TransferMoney(props) {
                                 height: 55,
                             }}>
                             <Icon name="calendar" size={30} color="black" />
-                            <Text style={styles.fontInput}>{time}</Text>
+                            {time == 'วันที่โอน' ? (
+                                <Text style={styles.fontInput}>{time}</Text>
+                            ) : (
+                                <Text style={styles.fontBack}>{time}</Text>
+                            )}
                             {show && (
                                 <DateTimePicker
                                     testID="dateTimePicker"
@@ -230,10 +225,28 @@ const styles = StyleSheet.create({
         height: 55,
         marginTop: 20,
     },
+    fontBack: {
+        fontFamily: FONT_BOLD,
+        fontSize: FONT_SIZES['500'],
+        color: 'black',
+        borderBottomWidth: 0,
+        paddingHorizontal: 15,
+        width: '80%',
+        height: 55,
+        marginTop: 20,
+    },
     image: {
         width: 250,
         height: 250,
         borderRadius: 20,
         marginBottom: 30,
+    },
+    fontDate: {
+        height: 55,
+        width: 300,
+        fontSize: 50,
+        color: COLORS.Gray1,
+        fontFamily: FONT_BOLD,
+        fontSize: FONT_SIZES['600'],
     },
 });
