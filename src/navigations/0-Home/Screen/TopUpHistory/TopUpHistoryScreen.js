@@ -1,9 +1,17 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
-export default function TopUpHistory() {
+import Header from '@components/Header';
+import BackButton from '@components/Button/BackButton';
+export default function TopUpHistory(props) {
     return (
         <ScrollView>
+            <Header
+                title="ประวัติการโอนเงิน"
+                leftComponent={
+                    <BackButton onPress={() => props.navigation.goBack()} />
+                }
+            />
             <View style={{ marginTop: 10 }}>
                 <View style={styles.box}>
                     <View

@@ -14,6 +14,8 @@ import { Picker } from '@react-native-community/picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { launchImageLibrary } from 'react-native-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import Header from '@components/Header';
+import BackButton from '@components/Button/BackButton';
 import Moment from 'moment';
 export default function TransferMoney(props) {
     const [money, setMoney] = useState('');
@@ -45,7 +47,14 @@ export default function TransferMoney(props) {
 
     return (
         <ScrollView>
+             <Header
+                    title="ข้อมูลการโอน"
+                    leftComponent={
+                        <BackButton onPress={() => props.navigation.goBack()} />
+                    }
+                />
             <View style={styles.container}>
+           
                 <TouchableHighlight
                     underlayColor="null"
                     onPress={() =>

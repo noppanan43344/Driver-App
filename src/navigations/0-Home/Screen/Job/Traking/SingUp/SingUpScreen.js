@@ -8,8 +8,10 @@ import {
 } from 'react-native';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import Header from '@components/Header';
+import BackButton from '@components/Button/BackButton';
 import Signature from 'react-native-signature-canvas';
-export default function SingUpScreen({ onOK }) {
+export default function SingUpScreen(props) {
     const [response, setResponse] = useState(null);
     const [signature, setSign] = useState(null);
     const handleSignature = (signature) => {
@@ -28,6 +30,12 @@ export default function SingUpScreen({ onOK }) {
       }`;
     return (
         <ScrollView>
+            <Header
+                title="ลงชื่อรับสินค้า"
+                leftComponent={
+                    <BackButton onPress={() => props.navigation.goBack()} />
+                }
+            />
             <View style={styles.container}>
                 <TouchableHighlight
                     underlayColor="null"

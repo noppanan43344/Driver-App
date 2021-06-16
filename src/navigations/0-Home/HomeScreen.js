@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
-export default function index({navigation}) {
+export default function index(props) {
     return (
         <View style={styles.container}>
             <View style={styles.view}>
@@ -21,13 +21,13 @@ export default function index({navigation}) {
                     }}>
                     <TouchableHighlight
                         underlayColor="null"
-                        onPress={() => navigation.openDrawer()}>
+                        onPress={() => props.navigation.openDrawer()}>
                         <Icon name="bars" size={30} color="black"></Icon>
                     </TouchableHighlight>
                     <TouchableHighlight
                         underlayColor="null"
                         onPress={() =>
-                            navigation.navigate('ProfileScreen')
+                            props.navigation.navigate('ProfileScreen')
                         }>
                         <Icon name="pencil" size={30} color="black"></Icon>
                     </TouchableHighlight>
@@ -56,7 +56,7 @@ export default function index({navigation}) {
                                     <TouchableHighlight
                                         underlayColor="null"
                                         onPress={() =>
-                                            navigation.navigate(
+                                            props.navigation.navigate(
                                                 'JobScreen',
                                             )
                                         }>
@@ -73,7 +73,7 @@ export default function index({navigation}) {
                                     <TouchableHighlight
                                         underlayColor="null"
                                         onPress={() =>
-                                            navigation.navigate(
+                                            props.navigation.navigate(
                                                 'TopUpHistoryScreen',
                                             )
                                         }>
@@ -93,7 +93,7 @@ export default function index({navigation}) {
                                     <TouchableHighlight
                                         underlayColor="null"
                                         onPress={() =>
-                                            navigation.navigate(
+                                            props.navigation.navigate(
                                                 'TopUpScreen',
                                             )
                                         }>

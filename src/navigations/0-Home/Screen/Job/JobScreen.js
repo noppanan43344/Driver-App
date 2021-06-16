@@ -5,11 +5,20 @@ import {
     StyleSheet,
     ScrollView,
     TouchableHighlight,
+    SafeAreaView,
 } from 'react-native';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
+import Header from '@components/Header';
+import BackButton from '@components/Button/BackButton';
 export default function JobScreen(props) {
     return (
         <ScrollView>
+            <Header
+                title="รายการสินค้าที่ต้องส่ง"
+                leftComponent={
+                    <BackButton onPress={() => props.navigation.goBack()} />
+                }
+            />
             <View style={{ marginTop: 20, paddingHorizontal: 15 }}>
                 <TouchableHighlight
                     underlayColor="null"

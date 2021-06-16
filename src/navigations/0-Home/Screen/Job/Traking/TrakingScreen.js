@@ -7,9 +7,18 @@ import {
     StyleSheet,
 } from 'react-native';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
+import Header from '@components/Header';
+import BackButton from '@components/Button/BackButton';
+
 export default function TrakingScreen(props) {
     return (
         <View style={{ flex: 1, flexDirection: 'column' }}>
+            <Header
+                title="เส้นทาง"
+                leftComponent={
+                    <BackButton onPress={() => props.navigation.goBack()} />
+                }
+            />
             <View style={{ flex: 0.65, backgroundColor: COLORS.APP_COLORS }}>
                 <Text>1</Text>
             </View>

@@ -1,22 +1,17 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import TopUpHistory from './TopUpHistory';
-import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
+import TopUpHistory from './TopUpHistoryScreen';
+
 const Stack = createStackNavigator();
 
-export default TopUpHistoryStack = (props) => {
+export default TopUpHistoryStack = ({ navigation }) => {
     return (
         <Stack.Navigator>
             <Stack.Screen
                 name="ProfileScreen"
                 component={TopUpHistory}
                 options={{
-                    title: 'ประวัติการโอน',
-                    headerStyle: { backgroundColor: COLORS.APP_COLORS },
-                    headerTintColor: 'white',
-                    headerTitleStyle: {
-                        fontFamily: FONT_BOLD,
-                    },
+                    headerShown: false,
                 }}></Stack.Screen>
         </Stack.Navigator>
     );

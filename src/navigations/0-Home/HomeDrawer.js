@@ -9,21 +9,42 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { DrawerContent } from './Screen/DrawerContent';
 import Icon from 'react-native-vector-icons/FontAwesome';
 const Drawer = createDrawerNavigator();
-export default HomeStacks = () => {
+export default HomeStacks = ({ navigation }) => {
     return (
         <Drawer.Navigator
             drawerContent={(props) => <DrawerContent {...props} />}>
             <Drawer.Screen name="HomeScreen" component={Home} />
-            <Drawer.Screen name="JobScreen" component={JobStack} />
-            <Drawer.Screen name="TopUpScreen" component={TopUpStack} />
+            <Drawer.Screen
+                name="JobScreen"
+                component={JobStack}
+                // onPress={() => {
+                //     console.log('1');
+                //     navigation.goBack();
+                // }}
+            />
+            <Drawer.Screen
+                name="TopUpScreen"
+                component={TopUpStack}
+                // onPress={() => {
+                //     console.log('1');
+                //     navigation.goBack();
+                // }}
+            />
             <Drawer.Screen
                 name="TopUpHistoryScreen"
                 component={TopUpHistoryStack}
+                // onPress={() => {
+                //     console.log('1');
+                //     navigation.goBack();
+                // }}
             />
             <Drawer.Screen
                 name="ProfileScreen"
                 component={ProfileStack}
-                onPress={() => navigation.popToTop()}
+                // onPress={() => {
+                //     console.log('1');
+                //     navigation.goBack();
+                // }}
             />
         </Drawer.Navigator>
     );

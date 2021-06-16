@@ -8,9 +8,17 @@ import {
     TouchableHighlight,
 } from 'react-native';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
+import Header from '@components/Header';
+import BackButton from '@components/Button/BackButton';
 export default function TopUpScreen(props) {
     return (
         <ScrollView>
+            <Header
+                title="ช่องทางการโอนเงิน"
+                leftComponent={
+                    <BackButton onPress={() => props.navigation.goBack()} />
+                }
+            />
             <View>
                 <View style={{ flexDirection: 'row' }}>
                     <View style={{ flex: 0.5, alignItems: 'center' }}>

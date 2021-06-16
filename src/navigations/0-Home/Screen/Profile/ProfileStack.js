@@ -1,22 +1,16 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import Profile from './Profile';
-import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
+import Profile from './ProfileScreen';
 const Stack = createStackNavigator();
 
-export default ProfileStack = (props) => {
+export default ProfileStack = ({ navigation }) => {
     return (
         <Stack.Navigator>
             <Stack.Screen
                 name="ProfileScreen"
                 component={Profile}
                 options={{
-                    title: 'ข้อมูลส่วนตัว',
-                    headerStyle: { backgroundColor: COLORS.APP_COLORS },
-                    headerTintColor: 'white',
-                    headerTitleStyle: {
-                        fontFamily: FONT_BOLD,
-                    },
+                    headerShown: false,
                 }}></Stack.Screen>
         </Stack.Navigator>
     );
