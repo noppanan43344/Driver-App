@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-    Text,
     View,
     Image,
     StyleSheet,
@@ -10,7 +9,6 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { PrimaryButton } from '@components/Button';
-import { Input } from 'react-native-elements';
 import SpinnerDialog from '@components/Spinner/SpinnerDialog';
 import I18n from '../../../i18n/i18';
 import { FONT_BOLD, FONT_SIZES, COLORS } from '@components/styles';
@@ -27,7 +25,7 @@ export default function AuthScreen(props) {
 
         setTimeout(() => {
             setloading(false);
-            navigation.navigate('HomeStack');
+            navigation.navigate('HomeDrawer');
         }, 0);
     }
 

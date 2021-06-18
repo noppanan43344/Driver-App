@@ -26,7 +26,7 @@ export default function index(props) {
                     size: 35,
                     onPress: () => props.navigation.navigate('ProfileScreen'),
                 }}
-                backgroundColor="white"
+                backgroundColor={COLORS.APP_COLORS}
                 // elevation={20}
             />
             <View style={styles.view}>

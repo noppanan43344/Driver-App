@@ -56,7 +56,7 @@ export function DrawerContent(props) {
                     icon={({ color, size }) => (
                         <Icon name="list-ol" color={color} size={size} />
                     )}
-                    label="สินค้าที่ต้องไปส่ง"
+                    label="สินค้าที่จะส่ง"
                     onPress={() => {
                         props.navigation.navigate('JobScreen');
                     }}
