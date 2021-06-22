@@ -5,6 +5,7 @@ import JobStack from './Screen/Job/JobStack';
 import TopUpStack from './Screen/TopUp/TopUpStack';
 import TopUpHistoryStack from './Screen/TopUpHistory/TopUpHistoryStack';
 import ProfileStack from './Screen/Profile/ProfileStack';
+import ReportStack from './Screen/Report/ReportStack';
 const Stack = createStackNavigator();
 
 export default HomeStack = () => {
@@ -37,6 +38,12 @@ export default HomeStack = () => {
             <Stack.Screen
                 name="ProfileScreen"
                 component={ProfileStack}
+                options={{
+                    headerShown: false,
+                }}></Stack.Screen>
+            <Stack.Screen
+                name="ReportScreen"
+                component={ReportStack}
                 options={{
                     headerShown: false,
                 }}></Stack.Screen>

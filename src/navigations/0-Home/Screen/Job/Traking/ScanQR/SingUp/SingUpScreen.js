@@ -5,11 +5,13 @@ import {
     TouchableHighlight,
     ScrollView,
     Image,
+    Text,
 } from 'react-native';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import Header from '@components/Header';
 import BackButton from '@components/Button/BackButton';
+import { PrimaryButton } from '@components/Button';
 import Signature from 'react-native-signature-canvas';
 export default function SingUpScreen(props) {
     const [response, setResponse] = useState(null);
@@ -29,7 +31,7 @@ export default function SingUpScreen(props) {
         color: #FFF;
       }`;
     return (
-        <ScrollView>
+        <>
             <Header
                 title="ลงชื่อรับสินค้า"
                 leftComponent={
@@ -38,14 +40,15 @@ export default function SingUpScreen(props) {
             />
             <View style={styles.container}>
                 <TouchableHighlight
+                    // style={{ borderColor: 'red', borderWidth: 2 }}
                     underlayColor="null"
                     onPress={() =>
                         launchCamera(
                             {
                                 mediaType: 'photo',
                                 includeBase64: false,
-                                maxHeight: 200,
-                                maxWidth: 200,
+                                maxHeight: 1980,
+                                maxWidth: 1020,
                             },
                             (response) => {
                                 if (response.didCancel) {
@@ -76,11 +79,11 @@ export default function SingUpScreen(props) {
                     ) : (
                         <Image
                             style={styles.image}
-                            source={require('../../../../../../assets/images/photo.png')}
+                            source={require('@assets/images/photo.png')}
                         />
                     )}
                 </TouchableHighlight>
-                <View style={{ height: 360, width: '100%', marginTop: 20 }}>
+                {/* <View style={{ height: 355, width: '100%', marginTop: 20 }}>
                     <Signature
                         onOK={handleSignature}
                         onEmpty={handleEmpty}
@@ -88,26 +91,41 @@ export default function SingUpScreen(props) {
                         clearText="Clear"
                         confirmText="Save"
                     />
+                </View> */}
+
+                <View style={styles.buttons}>
+                    <PrimaryButton
+                        titleStyle={{
+                            fontFamily: FONT_BOLD,
+                            fontSize: FONT_SIZES['500'],
+                        }}
+                        buttonStyle={{
+                            borderRadius: 60,
+                            height: 60,
+                            width: '100%',
+                        }}
+                        title={'บันทึกข้อมูล'}
+                        onPress={() =>{}
+                            // props.navigation.navigate('SingUpScreen')
+                        }
+                    />
                 </View>
             </View>
-        </ScrollView>
+        </>
     );
 }
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal: 30,
+        paddingHorizontal: 15,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 15,
+        marginTop: 10,
     },
-    button: {
-        backgroundColor: COLORS.APP_COLORS,
-        borderRadius: 50,
+    buttons: {
         width: '100%',
-        alignItems: 'center',
-        paddingHorizontal: '30%',
-        marginTop: 20,
+        marginTop: 30,
+        paddingHorizontal: 20,
     },
     font: {
         fontFamily: FONT_BOLD,
@@ -116,8 +134,8 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
     },
     image: {
-        width: 220,
-        height: 220,
+        width: 330,
+        height: 330,
         borderRadius: 20,
     },
     singUp: {

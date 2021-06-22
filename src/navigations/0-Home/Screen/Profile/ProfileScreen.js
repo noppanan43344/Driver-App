@@ -64,7 +64,7 @@ export default function Profile(props) {
                     ) : (
                         <Image
                             style={styles.image}
-                            source={require('../../../../assets/images/photo.png')}
+                            source={require('@assets/images/photo.png')}
                         />
                     )}
                 </TouchableHighlight>

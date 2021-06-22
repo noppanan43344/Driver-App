@@ -44,7 +44,7 @@ export default function AuthScreen(props) {
                 <View style={styles.container}>
                     <Image
                         style={styles.tinyLogo}
-                        source={require('../../assets/images/logo.png')}
+                        source={require('@assets/images/logo.png')}
                     />
                     <View style={styles.text}>
                         <View

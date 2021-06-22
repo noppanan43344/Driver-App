@@ -33,7 +33,7 @@ export default function index(props) {
                 <View style={{ alignItems: 'center' }}>
                     <Image
                         style={styles.tinyLogo}
-                        source={require('../../assets/images/logo.png')}
+                        source={require('@assets/images/logo.png')}
                     />
                 </View>
                 <View style={{ flexDirection: 'row-reverse' }}>
@@ -64,7 +64,7 @@ export default function index(props) {
                                         <View style={styles.box}>
                                             <Image
                                                 style={styles.imageIcon}
-                                                source={require('../../assets/images/quality.png')}
+                                                source={require('@assets/images/quality.png')}
                                             />
                                             <Text style={styles.fontIcon}>
                                                 สินค้าที่จะส่ง
@@ -81,7 +81,7 @@ export default function index(props) {
                                         <View style={styles.box}>
                                             <Image
                                                 style={styles.imageIcon}
-                                                source={require('../../assets/images/clock.png')}
+                                                source={require('@assets/images/clock.png')}
                                             />
                                             <Text style={styles.fontIcon}>
                                                 ประวัติการโอน
@@ -104,10 +104,27 @@ export default function index(props) {
                                         <View style={styles.box}>
                                             <Image
                                                 style={styles.imageIcon}
-                                                source={require('../../assets/images/debit-card.png')}
+                                                source={require('@assets/images/debit-card.png')}
                                             />
                                             <Text style={styles.fontIcon}>
                                                 เติมเงิน
+                                            </Text>
+                                        </View>
+                                    </TouchableHighlight>
+                                    <TouchableHighlight
+                                        underlayColor="null"
+                                        onPress={() =>
+                                            props.navigation.navigate(
+                                                'ReportScreen',
+                                            )
+                                        }>
+                                        <View style={styles.box}>
+                                            <Image
+                                                style={styles.imageIcon}
+                                                source={require('@assets/images/success.png')}
+                                            />
+                                            <Text style={styles.fontIcon}>
+                                                รายงานการส่งสินค้า
                                             </Text>
                                         </View>
                                     </TouchableHighlight>
