@@ -1,46 +1,36 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Job from './JobScreen';
-import SingUp from './Traking/SingUp/SingUpScreen';
+import SingUp from './Traking/ScanQR/SingUp/SingUpScreen';
+import ScanQR from './Traking/ScanQR/ScanQRScreen';
 import Traking from './Traking/TrakingScreen';
-import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
+
 const Stack = createStackNavigator();
 
-export default StackJob = (props) => {
+export default JobStack = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen
                 name="JobScreen"
                 component={Job}
                 options={{
-                    title: 'รายการสินค้าที่ต้องส่ง',
-                    headerStyle: { backgroundColor: COLORS.APP_COLORS },
-                    headerTintColor: 'white',
-                    headerTitleStyle: {
-                        fontFamily: FONT_BOLD,
-                    },
+                    headerShown: false,
                 }}></Stack.Screen>
             <Stack.Screen
                 name="TrakingScreen"
                 component={Traking}
+                options={{ headerShown: false }}></Stack.Screen>
+            <Stack.Screen
+                name="ScanQRScreen"
+                component={ScanQR}
                 options={{
-                    title: 'เส้นทาง',
-                    headerStyle: { backgroundColor: COLORS.APP_COLORS },
-                    headerTintColor: 'white',
-                    headerTitleStyle: {
-                        fontFamily: FONT_BOLD,
-                    },
+                    headerShown: false,
                 }}></Stack.Screen>
             <Stack.Screen
                 name="SingUpScreen"
                 component={SingUp}
                 options={{
-                    title: 'ลงชื่อรับสินค้า',
-                    headerStyle: { backgroundColor: COLORS.APP_COLORS },
-                    headerTintColor: 'white',
-                    headerTitleStyle: {
-                        fontFamily: FONT_BOLD,
-                    },
+                    headerShown: false,
                 }}></Stack.Screen>
         </Stack.Navigator>
     );

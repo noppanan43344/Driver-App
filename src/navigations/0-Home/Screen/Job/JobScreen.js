@@ -5,39 +5,67 @@ import {
     StyleSheet,
     ScrollView,
     TouchableHighlight,
+    SafeAreaView,
 } from 'react-native';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
+import Header from '@components/Header';
+import BackButton from '@components/Button/BackButton';
 export default function JobScreen(props) {
+    var x = [1, 2, 3, 4, 5, 6, 7];
     return (
         <ScrollView>
-            <View style={{ marginTop: 20, paddingHorizontal: 15 }}>
-                <TouchableHighlight
-                    underlayColor="null"
-                    onPress={() => props.navigation.navigate('TrakingScreen')}>
-                    <View style={styles.box}>
-                        <View style={styles.row}>
-                            <View style={styles.flexStart}>
-                                <Text style={styles.font}>ชื่อ</Text>
-                                <Text style={styles.font}>เบอร์</Text>
-                                <Text style={styles.font}>สถานะ</Text>
-                                <Text style={styles.font}>ที่อยู่</Text>
+            <Header
+                title="รายการสินค้าที่ต้องส่ง"
+                leftComponent={
+                    <BackButton onPress={() => props.navigation.goBack()} />
+                }
+            />
+            {x.length != 0 ? (
+                <View style={{ marginTop: 20, paddingHorizontal: 15 }}>
+                    {x.map((value, i) => (
+                        <TouchableHighlight
+                            key={i}
+                            underlayColor="null"
+                            onPress={() =>
+                                props.navigation.navigate('TrakingScreen')
+                            }>
+                            <View style={styles.box}>
+                                <View style={styles.row}>
+                                    <View style={styles.flexStart}>
+                                        <Text style={styles.font}>ชื่อ</Text>
+                                        <Text style={styles.font}>เบอร์</Text>
+                                        <Text style={styles.font}>สถานะ</Text>
+                                        <Text style={styles.font}>ที่อยู่</Text>
+                                    </View>
+                                    <View style={styles.flexEnd}>
+                                        <Text style={styles.font}>
+                                            นพนรรณ์ เลิศนันทพร
+                                        </Text>
+                                        <Text style={styles.font}>
+                                            0940342997
+                                        </Text>
+                                        <Text style={styles.font}>
+                                            ยังไม่ได้รับสินค้า
+                                        </Text>
+                                        <Text style={styles.font}>
+                                            999/99 บ้านขามเรียง กันทรวิชัย
+                                            มหาสารคาม
+                                        </Text>
+                                    </View>
+                                </View>
                             </View>
-                            <View style={styles.flexEnd}>
-                                <Text style={styles.font}>
-                                    นพนรรณ์ เลิศนันทพร
-                                </Text>
-                                <Text style={styles.font}>0940342997</Text>
-                                <Text style={styles.font}>
-                                    ยังไม่ได้รับสินค้า
-                                </Text>
-                                <Text style={styles.font}>
-                                    999/99 บ้านขามเรียง กันทรวิชัย มหาสารคาม
-                                </Text>
-                            </View>
-                        </View>
-                    </View>
-                </TouchableHighlight>
-            </View>
+                        </TouchableHighlight>
+                    ))}
+                </View>
+            ) : (
+                <View
+                    style={{
+                        flex: 1,
+                        alignItems: 'center',
+                    }}>
+                    <Text style={styles.font}>ไม่มีรายการที่ต้องส่ง</Text>
+                </View>
+            )}
         </ScrollView>
     );
 }

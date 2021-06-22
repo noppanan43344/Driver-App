@@ -11,14 +11,21 @@ import {
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { ImagePicker, launchImageLibrary } from 'react-native-image-picker';
-
-export default function Profile() {
+import Header from '@components/Header';
+import BackButton from '@components/Button/BackButton';
+export default function Profile(props) {
     const [name, setName] = useState('นพนรรณ์ เลิศนันทพร');
     const [phone, setPhone] = useState('0940342997');
     const [password, setPassword] = useState('**********');
     const [response, setResponse] = useState(null);
     return (
         <ScrollView>
+            <Header
+                title="ข้อมูลส่วนตัว"
+                leftComponent={
+                    <BackButton onPress={() => props.navigation.goBack()} />
+                }
+            />
             <View style={styles.container}>
                 <TouchableHighlight
                     underlayColor="null"
@@ -57,7 +64,7 @@ export default function Profile() {
                     ) : (
                         <Image
                             style={styles.image}
-                            source={require('../../../../assets/images/photo.png')}
+                            source={require('@assets/images/photo.png')}
                         />
                     )}
                 </TouchableHighlight>

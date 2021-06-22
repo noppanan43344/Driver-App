@@ -5,16 +5,20 @@ import {
     TouchableHighlight,
     ScrollView,
     Image,
+    Text,
 } from 'react-native';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
-import { launchImageLibrary } from 'react-native-image-picker';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import Header from '@components/Header';
+import BackButton from '@components/Button/BackButton';
+import { PrimaryButton } from '@components/Button';
 import Signature from 'react-native-signature-canvas';
-export default function SingUpScreen({ onOK }) {
+export default function SingUpScreen(props) {
     const [response, setResponse] = useState(null);
     const [signature, setSign] = useState(null);
     const handleSignature = (signature) => {
         console.log(signature);
-        console.log(response.assets[0].uri);
+        // console.log(response.assets[0].uri);
         setSign(signature);
     };
 
@@ -27,15 +31,24 @@ export default function SingUpScreen({ onOK }) {
         color: #FFF;
       }`;
     return (
-        <ScrollView>
+        <>
+            <Header
+                title="ลงชื่อรับสินค้า"
+                leftComponent={
+                    <BackButton onPress={() => props.navigation.goBack()} />
+                }
+            />
             <View style={styles.container}>
                 <TouchableHighlight
+                    // style={{ borderColor: 'red', borderWidth: 2 }}
                     underlayColor="null"
                     onPress={() =>
-                        launchImageLibrary(
+                        launchCamera(
                             {
                                 mediaType: 'photo',
                                 includeBase64: false,
+                                maxHeight: 1980,
+                                maxWidth: 1020,
                             },
                             (response) => {
                                 if (response.didCancel) {
@@ -52,12 +65,13 @@ export default function SingUpScreen({ onOK }) {
                                     );
                                     Alert.alert(response.customButton);
                                 } else {
+                                    console.log(response);
                                     setResponse(response);
                                 }
                             },
                         )
                     }>
-                    {response ? (
+                    {response != null ? (
                         <Image
                             style={styles.image}
                             source={{ uri: response.assets[0].uri }}
@@ -65,11 +79,11 @@ export default function SingUpScreen({ onOK }) {
                     ) : (
                         <Image
                             style={styles.image}
-                            source={require('../../../../../../assets/images/photo.png')}
+                            source={require('@assets/images/photo.png')}
                         />
                     )}
                 </TouchableHighlight>
-                <View style={{ height: 360, width: '100%', marginTop: 20 }}>
+                {/* <View style={{ height: 355, width: '100%', marginTop: 20 }}>
                     <Signature
                         onOK={handleSignature}
                         onEmpty={handleEmpty}
@@ -77,38 +91,41 @@ export default function SingUpScreen({ onOK }) {
                         clearText="Clear"
                         confirmText="Save"
                     />
+                </View> */}
+
+                <View style={styles.buttons}>
+                    <PrimaryButton
+                        titleStyle={{
+                            fontFamily: FONT_BOLD,
+                            fontSize: FONT_SIZES['500'],
+                        }}
+                        buttonStyle={{
+                            borderRadius: 60,
+                            height: 60,
+                            width: '100%',
+                        }}
+                        title={'บันทึกข้อมูล'}
+                        onPress={() =>{}
+                            // props.navigation.navigate('SingUpScreen')
+                        }
+                    />
                 </View>
-                {/* <TouchableHighlight
-                underlayColor="null"
-                onPress={() => {
-                    console.log('X');
-                    console.log(signature);
-                    // console.log(response.assets[0].uri);
-                    // console.log(selectedValue);
-                    // console.log(time);
-                    // console.log(money);
-                }}>
-               
-            </TouchableHighlight> */}
             </View>
-        </ScrollView>
+        </>
     );
 }
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal: 30,
+        paddingHorizontal: 15,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 15,
+        marginTop: 10,
     },
-    button: {
-        backgroundColor: COLORS.APP_COLORS,
-        borderRadius: 50,
+    buttons: {
         width: '100%',
-        alignItems: 'center',
-        paddingHorizontal: '30%',
-        marginTop: 20,
+        marginTop: 30,
+        paddingHorizontal: 20,
     },
     font: {
         fontFamily: FONT_BOLD,
@@ -117,15 +134,14 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
     },
     image: {
-        width: 220,
-        height: 220,
+        width: 330,
+        height: 330,
         borderRadius: 20,
     },
     singUp: {
-        width: 220,
-        height: 220,
+        width: 230,
+        height: 230,
         borderWidth: 2,
-        // borderRadius: 20,
         marginBottom: 30,
     },
     preview: {

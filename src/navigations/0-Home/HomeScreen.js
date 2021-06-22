@@ -8,34 +8,32 @@ import {
     TouchableHighlight,
 } from 'react-native';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
-import Icon from 'react-native-vector-icons/FontAwesome';
-export default function index({navigation}) {
+import { Header } from 'react-native-elements';
+
+export default function index(props) {
     return (
         <View style={styles.container}>
+            <Header
+                leftComponent={{
+                    icon: 'menu',
+                    color: '#000',
+                    size: 35,
+                    onPress: () => props.navigation.openDrawer(),
+                }}
+                rightComponent={{
+                    icon: 'edit',
+                    color: '#000',
+                    size: 35,
+                    onPress: () => props.navigation.navigate('ProfileScreen'),
+                }}
+                backgroundColor={COLORS.APP_COLORS}
+                // elevation={20}
+            />
             <View style={styles.view}>
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        marginTop: 15,
-                    }}>
-                    <TouchableHighlight
-                        underlayColor="null"
-                        onPress={() => navigation.openDrawer()}>
-                        <Icon name="bars" size={30} color="black"></Icon>
-                    </TouchableHighlight>
-                    <TouchableHighlight
-                        underlayColor="null"
-                        onPress={() =>
-                            navigation.navigate('ProfileScreen')
-                        }>
-                        <Icon name="pencil" size={30} color="black"></Icon>
-                    </TouchableHighlight>
-                </View>
                 <View style={{ alignItems: 'center' }}>
                     <Image
                         style={styles.tinyLogo}
-                        source={require('../../assets/images/logo.png')}
+                        source={require('@assets/images/logo.png')}
                     />
                 </View>
                 <View style={{ flexDirection: 'row-reverse' }}>
@@ -52,18 +50,21 @@ export default function index({navigation}) {
                             }}>
                             <View style={{ flexDirection: 'row' }}>
                                 <View
-                                    style={{ flex: 0.5, alignItems: 'center' }}>
+                                    style={{
+                                        flex: 0.5,
+                                        alignItems: 'center',
+                                    }}>
                                     <TouchableHighlight
                                         underlayColor="null"
                                         onPress={() =>
-                                            navigation.navigate(
+                                            props.navigation.navigate(
                                                 'JobScreen',
                                             )
                                         }>
                                         <View style={styles.box}>
                                             <Image
                                                 style={styles.imageIcon}
-                                                source={require('../../assets/images/quality.png')}
+                                                source={require('@assets/images/quality.png')}
                                             />
                                             <Text style={styles.fontIcon}>
                                                 สินค้าที่จะส่ง
@@ -73,14 +74,14 @@ export default function index({navigation}) {
                                     <TouchableHighlight
                                         underlayColor="null"
                                         onPress={() =>
-                                            navigation.navigate(
+                                            props.navigation.navigate(
                                                 'TopUpHistoryScreen',
                                             )
                                         }>
                                         <View style={styles.box}>
                                             <Image
                                                 style={styles.imageIcon}
-                                                source={require('../../assets/images/clock.png')}
+                                                source={require('@assets/images/clock.png')}
                                             />
                                             <Text style={styles.fontIcon}>
                                                 ประวัติการโอน
@@ -89,21 +90,41 @@ export default function index({navigation}) {
                                     </TouchableHighlight>
                                 </View>
                                 <View
-                                    style={{ flex: 0.5, alignItems: 'center' }}>
+                                    style={{
+                                        flex: 0.5,
+                                        alignItems: 'center',
+                                    }}>
                                     <TouchableHighlight
                                         underlayColor="null"
                                         onPress={() =>
-                                            navigation.navigate(
+                                            props.navigation.navigate(
                                                 'TopUpScreen',
                                             )
                                         }>
                                         <View style={styles.box}>
                                             <Image
                                                 style={styles.imageIcon}
-                                                source={require('../../assets/images/debit-card.png')}
+                                                source={require('@assets/images/debit-card.png')}
                                             />
                                             <Text style={styles.fontIcon}>
                                                 เติมเงิน
+                                            </Text>
+                                        </View>
+                                    </TouchableHighlight>
+                                    <TouchableHighlight
+                                        underlayColor="null"
+                                        onPress={() =>
+                                            props.navigation.navigate(
+                                                'ReportScreen',
+                                            )
+                                        }>
+                                        <View style={styles.box}>
+                                            <Image
+                                                style={styles.imageIcon}
+                                                source={require('@assets/images/success.png')}
+                                            />
+                                            <Text style={styles.fontIcon}>
+                                                รายงานการส่งสินค้า
                                             </Text>
                                         </View>
                                     </TouchableHighlight>
