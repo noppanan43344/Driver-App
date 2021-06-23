@@ -21,7 +21,7 @@ export default function SingUpScreen(props) {
         // console.log(response.assets[0].uri);
         setSign(signature);
     };
-
+    let { traking } = props.route.params;
     const handleEmpty = () => {
         console.log('Empty');
     };
@@ -83,6 +83,7 @@ export default function SingUpScreen(props) {
                         />
                     )}
                 </TouchableHighlight>
+                <Text>{traking}</Text>
                 {/* <View style={{ height: 355, width: '100%', marginTop: 20 }}>
                     <Signature
                         onOK={handleSignature}
@@ -105,7 +106,8 @@ export default function SingUpScreen(props) {
                             width: '100%',
                         }}
                         title={'บันทึกข้อมูล'}
-                        onPress={() =>{}
+                        onPress={
+                            () => {}
                             // props.navigation.navigate('SingUpScreen')
                         }
                     />

@@ -1,82 +1,56 @@
 import Header from '@components/Header';
 import BackButton from '@components/Button/BackButton';
 import React from 'react';
-import {
-    View,
-    Image,
-    StyleSheet,
-} from 'react-native';
-import { PrimaryButton } from '@components/Button';
-import { FONT_BOLD, FONT_SIZES, COLORS } from '@components/styles';
+import { View, Image, StyleSheet, Alert } from 'react-native';
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import { RNCamera } from 'react-native-camera';
 export default function ScanQRScreen(props) {
+    var track = 'ABCD-123-00-TH1';
+    createTwoButtonAlert = () =>
+        Alert.alert('เกิดข้อผิดพลาด', 'QR Code ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง', [
+            { text: 'OK', onPress: () => props.navigation.goBack() },
+        ]);
+    const onSuccess = (e) => {
+        // console.log(e.data);
+        // console.log(track);
+        if (track == e.data) {
+            props.navigation.navigate('SingUpScreen', { traking: track });
+        } else {
+            createTwoButtonAlert();
+            console.log('error');
+        }
+    };
     return (
         <>
             <Header
-                title="สแกน QR Code"
+                title="Scan QR Code"
                 leftComponent={
                     <BackButton onPress={() => props.navigation.goBack()} />
                 }
             />
-
-            <View style={styles.container}>
-                <Image
-                    style={styles.tinyLogo}
-                    source={require('@assets/images/qr-code.png')}
-                />
-                <View style={styles.buttons}>
-                    <PrimaryButton
-                        titleStyle={{
-                            fontFamily: FONT_BOLD,
-                            fontSize: FONT_SIZES['500'],
-                        }}
-                        buttonStyle={{
-                            borderRadius: 60,
-                            height: 60,
-                            width: '100%',
-                        }}
-                        title={'Scan'}
-                        onPress={() =>
-                            props.navigation.navigate('SingUpScreen')
-                        }
-                    />
-                </View>
-            </View>
+            <QRCodeScanner
+                onRead={onSuccess}
+                flashMode={RNCamera.Constants.FlashMode.off}
+            />
         </>
     );
 }
 const styles = StyleSheet.create({
-    container: {
+    centerText: {
         flex: 1,
-        paddingHorizontal: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
+        fontSize: 18,
+        padding: 32,
+        color: '#777',
     },
-    buttons: {
-        width: '100%',
-        marginTop: 30,
+    textBold: {
+        fontWeight: '500',
+        color: '#000',
     },
-    tinyLogo: {
-        height: 230,
-        width: 230,
-        borderRadius: 20,
-        marginBottom: 100,
-        marginTop: 50,
+    buttonText: {
+        fontSize: 21,
+        color: 'rgb(0,122,255)',
     },
-    text: {
-        backgroundColor: COLORS.TEXTFILED,
-        borderRadius: 50,
-        width: '100%',
-        paddingLeft: 20,
-        marginBottom: 20,
-    },
-    textInput: {
-        fontFamily: FONT_BOLD,
-        fontSize: FONT_SIZES['500'],
-        color: 'black',
-        borderBottomWidth: 0,
-        paddingHorizontal: 15,
-        width: '80%',
-        height: 55,
-        // justifyContent: 'center',
+    buttonTouchable: {
+        padding: 16,
     },
 });

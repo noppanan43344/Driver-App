@@ -12,7 +12,8 @@ import Header from '@components/Header';
 import BackButton from '@components/Button/BackButton';
 import MapView, { Polyline, Marker } from 'react-native-maps';
 import GetLocation from 'react-native-get-location';
-import Loading from '../../../../../components/Loading/Loading';
+import Loading from '@components/Loading/Loading';
+
 export default function TrakingScreen(props) {
     const [lat, setLat] = useState(0);
     const [long, setLong] = useState(0);
@@ -60,19 +61,22 @@ export default function TrakingScreen(props) {
                                 longitudeDelta: 0.015,
                             }}>
                             <Marker
-                                coordinate={{ latitude: lat, longitude: long }}
+                                image={require('@assets/images/mark.png')}
+                                coordinate={{
+                                    latitude: lat,
+                                    longitude: long,
+                                }}
                                 title="อยู่ดี มีสุข"
-                                // description={marker.description}
                             />
                             <Marker
-                                style={{ width: 2, height: 2 }}
+                                image={require('@assets/images/home.png')}
                                 coordinate={{
                                     latitude: 16.252035,
                                     longitude: 103.237163,
                                 }}
-                                image={require('@assets/images/mark.png')}
-                                // description={marker.description}
+                                title="อยู่ดี มีสุข"
                             />
+
                             <Polyline
                                 coordinates={[
                                     {
@@ -100,7 +104,7 @@ export default function TrakingScreen(props) {
                                 strokeColor="red" // fallback for when `strokeColors` is not supported by the map-provider
                                 strokeColors={[
                                     '#7F0000',
-                                    '#00000000', // no color, creates a "long" gradient between the previous and next coordinate
+                                    '#000000', // no color, creates a "long" gradient between the previous and next coordinate
                                     '#B24112',
                                     '#E5845C',
                                     '#238C23',

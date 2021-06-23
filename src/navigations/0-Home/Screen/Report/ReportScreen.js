@@ -30,18 +30,19 @@ export default function ReportScreen(props) {
                 <View style={{ flexDirection: 'row' }}>
                     <View
                         style={{
-                            flex: 0.5,
+                            flex: 1,
                             alignItems: 'center',
                         }}>
                         <TouchableHighlight
                             underlayColor="null"
-                            onPress={() =>
-                                props.navigation.navigate('JobScreen')
+                            onPress={
+                                () => {}
+                                // props.navigation.navigate('JobScreen')
                             }>
                             <View style={styles.boxs}>
                                 <View style={{ flexDirection: 'row' }}>
                                     <Icon
-                                        name="product-hunt"
+                                        name="truck-moving"
                                         size={40}
                                         color="red"
                                         style={{ marginRight: 15 }}
@@ -55,8 +56,9 @@ export default function ReportScreen(props) {
                         </TouchableHighlight>
                         <TouchableHighlight
                             underlayColor="null"
-                            onPress={() =>
-                                props.navigation.navigate('TopUpHistoryScreen')
+                            onPress={
+                                () => {}
+                                // props.navigation.navigate('TopUpHistoryScreen')
                             }>
                             <View style={styles.boxs}>
                                 <View style={{ flexDirection: 'row' }}>
@@ -70,25 +72,28 @@ export default function ReportScreen(props) {
                                         1ชั่วโมง 30นาที
                                     </Text>
                                 </View>
-                                <Text style={styles.fontOrange}>เวลาเดินทาง</Text>
+                                <Text style={styles.fontOrange}>
+                                    เวลาเดินทาง
+                                </Text>
                             </View>
                         </TouchableHighlight>
                     </View>
 
                     <View
                         style={{
-                            flex: 0.5,
+                            flex: 1,
                             alignItems: 'center',
                         }}>
                         <TouchableHighlight
                             underlayColor="null"
-                            onPress={() =>
-                                props.navigation.navigate('JobScreen')
+                            onPress={
+                                () => {}
+                                // props.navigation.navigate('JobScreen')
                             }>
                             <View style={styles.boxs}>
                                 <View style={{ flexDirection: 'row' }}>
                                     <Icon
-                                        name="map"
+                                        name="route"
                                         size={40}
                                         color="blue"
                                         style={{ marginRight: 10 }}
@@ -102,8 +107,9 @@ export default function ReportScreen(props) {
                         </TouchableHighlight>
                         <TouchableHighlight
                             underlayColor="null"
-                            onPress={() =>
-                                props.navigation.navigate('TopUpHistoryScreen')
+                            onPress={
+                                () => {}
+                                // props.navigation.navigate('TopUpHistoryScreen')
                             }>
                             <View style={styles.boxs}>
                                 <View style={{ flexDirection: 'row' }}>
@@ -173,7 +179,7 @@ const styles = StyleSheet.create({
         elevation: 5,
         borderRadius: 10,
         marginTop: 15,
-        width: 160,
+        minWidth: '90%',
     },
     font: {
         fontFamily: FONT_MED,
