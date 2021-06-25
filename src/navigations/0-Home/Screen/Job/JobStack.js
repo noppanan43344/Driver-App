@@ -10,12 +10,12 @@ const Stack = createStackNavigator();
 export default JobStack = () => {
     return (
         <Stack.Navigator>
-            <Stack.Screen
+            {/* <Stack.Screen
                 name="JobScreen"
                 component={Job}
                 options={{
                     headerShown: false,
-                }}></Stack.Screen>
+                }}></Stack.Screen> */}
             <Stack.Screen
                 name="TrakingScreen"
                 component={Traking}

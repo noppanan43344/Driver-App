@@ -28,11 +28,7 @@ export default function ReportScreen(props) {
                     alignItems: 'center',
                 }}>
                 <View style={{ flexDirection: 'row' }}>
-                    <View
-                        style={{
-                            flex: 1,
-                            alignItems: 'center',
-                        }}>
+                    <View style={styles.center}>
                         <TouchableHighlight
                             underlayColor="null"
                             onPress={
@@ -186,16 +182,6 @@ const styles = StyleSheet.create({
         fontSize: FONT_SIZES['400'],
         color: 'black',
     },
-    status: {
-        backgroundColor: 'red',
-        width: 120,
-        alignItems: 'center',
-    },
-    fontStatus: {
-        fontFamily: FONT_MED,
-        fontSize: FONT_SIZES['500'],
-        color: 'white',
-    },
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -206,10 +192,10 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         marginVertical: 5,
     },
-    flexEnd: { flex: 0.5, alignItems: 'flex-end', marginVertical: 5 },
-    imageIcon: {
-        height: 80,
-        width: 80,
+    flexEnd: {
+        flex: 0.5,
+        alignItems: 'flex-end',
+        marginVertical: 5,
     },
     fontIcon: {
         marginTop: 10,
@@ -241,4 +227,5 @@ const styles = StyleSheet.create({
         fontSize: FONT_SIZES['500'],
         color: 'orange',
     },
+    center: { flex: 1, alignItems: 'center' },
 });

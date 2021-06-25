@@ -21,6 +21,7 @@ export default function TrakingScreen(props) {
         LatLong();
     }, []);
     const [loading, setLoading] = useState(true);
+    var x = [1, 2, 3, 4, 5, 6, 7];
     const LatLong = async () => {
         await GetLocation.getCurrentPosition({
             enableHighAccuracy: true,
@@ -44,13 +45,54 @@ export default function TrakingScreen(props) {
                     <BackButton onPress={() => props.navigation.goBack()} />
                 }
             />
-
             {loading ? (
                 <>
                     <Loading />
                 </>
             ) : (
                 <>
+                    <View style={{ marginVertical: 2 }}>
+                        <ScrollView>
+                            <View
+                                style={{
+                                    marginTop: 5,
+                                    paddingHorizontal: 10,
+                                }}>
+                                <View style={styles.box}>
+                                    <View style={styles.row}>
+                                        <View style={styles.flexStart}>
+                                            <Text style={styles.font}>
+                                                สินค้าที่ส่ง (จำนวน)
+                                            </Text>
+                                            <Text style={styles.font}>
+                                                ระยะทาง (กิโลเมตร)
+                                            </Text>
+                                            <Text style={styles.font}>
+                                                เวลาที่ใช้ (ชั่วโมง)
+                                            </Text>
+                                            <Text style={styles.font}>
+                                                จำนวนเงิน (บาท)
+                                            </Text>
+                                        </View>
+                                        <View style={styles.flexEnd}>
+                                            <Text style={styles.font}>
+                                                3 / 24 / 3
+                                            </Text>
+                                            <Text style={styles.font}>
+                                                13 / 130 / 13
+                                            </Text>
+                                            <Text style={styles.font}>
+                                                0.30 / 6.30 / 0.30
+                                            </Text>
+                                            <Text style={styles.font}>
+                                                30.50 / 325 / 30.50
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </View>
+                            </View>
+                        </ScrollView>
+                    </View>
                     <View style={styles.container}>
                         <MapView
                             style={styles.map}
@@ -74,9 +116,8 @@ export default function TrakingScreen(props) {
                                     latitude: 16.252035,
                                     longitude: 103.237163,
                                 }}
-                                title="อยู่ดี มีสุข"
+                                title="ชัย ชนะ"
                             />
-
                             <Polyline
                                 coordinates={[
                                     {
@@ -116,53 +157,81 @@ export default function TrakingScreen(props) {
                     </View>
                     <View style={{ flex: 1 }}>
                         <ScrollView>
-                            <View
-                                style={{
-                                    marginTop: 20,
-                                    paddingHorizontal: 15,
-                                }}>
-                                <TouchableHighlight
-                                    underlayColor="null"
-                                    onPress={() =>
-                                        props.navigation.navigate(
-                                            'ScanQRScreen',
-                                        )
-                                    }>
-                                    <View style={styles.box}>
-                                        <View style={styles.row}>
-                                            <View style={styles.flexStart}>
-                                                <Text style={styles.font}>
-                                                    ชื่อ
-                                                </Text>
-                                                <Text style={styles.font}>
-                                                    เบอร์
-                                                </Text>
-                                                <Text style={styles.font}>
-                                                    สถานะ
-                                                </Text>
-                                                <Text style={styles.font}>
-                                                    ที่อยู่
-                                                </Text>
+                            {x.length != 0 ? (
+                                <View
+                                    style={{
+                                        marginTop: 10,
+                                        paddingHorizontal: 10,
+                                    }}>
+                                    {x.map((value, i) => (
+                                        <TouchableHighlight
+                                            key={i}
+                                            underlayColor="null"
+                                            onPress={() =>
+                                                props.navigation.navigate(
+                                                    'ScanQRScreen',
+                                                    { traking: '!!' },
+                                                )
+                                            }>
+                                            <View style={styles.box}>
+                                                <View style={styles.row}>
+                                                    <View
+                                                        style={
+                                                            styles.flexStart
+                                                        }>
+                                                        <Text
+                                                            style={styles.font}>
+                                                            ชื่อ
+                                                        </Text>
+                                                        <Text
+                                                            style={styles.font}>
+                                                            เบอร์
+                                                        </Text>
+                                                        <Text
+                                                            style={styles.font}>
+                                                            สถานะ
+                                                        </Text>
+                                                        <Text
+                                                            style={styles.font}>
+                                                            ที่อยู่
+                                                        </Text>
+                                                    </View>
+                                                    <View
+                                                        style={styles.flexEnd}>
+                                                        <Text
+                                                            style={styles.font}>
+                                                            นพนรรณ์ เลิศนันทพร
+                                                        </Text>
+                                                        <Text
+                                                            style={styles.font}>
+                                                            0940342997
+                                                        </Text>
+                                                        <Text
+                                                            style={styles.font}>
+                                                            ยังไม่ได้รับสินค้า
+                                                        </Text>
+                                                        <Text
+                                                            style={styles.font}>
+                                                            999/99 บ้านขามเรียง
+                                                            กันทรวิชัย มหาสารคาม
+                                                        </Text>
+                                                    </View>
+                                                </View>
                                             </View>
-                                            <View style={styles.flexEnd}>
-                                                <Text style={styles.font}>
-                                                    นพนรรณ์ เลิศนันทพร
-                                                </Text>
-                                                <Text style={styles.font}>
-                                                    0940342997
-                                                </Text>
-                                                <Text style={styles.font}>
-                                                    ยังไม่ได้รับสินค้า
-                                                </Text>
-                                                <Text style={styles.font}>
-                                                    999/99 บ้านขามเรียง
-                                                    กันทรวิชัย มหาสารคาม
-                                                </Text>
-                                            </View>
-                                        </View>
-                                    </View>
-                                </TouchableHighlight>
-                            </View>
+                                        </TouchableHighlight>
+                                    ))}
+                                </View>
+                            ) : (
+                                <View
+                                    style={{
+                                        flex: 1,
+                                        alignItems: 'center',
+                                    }}>
+                                    <Text style={styles.font}>
+                                        ไม่มีรายการที่ต้องส่ง
+                                    </Text>
+                                </View>
+                            )}
                         </ScrollView>
                     </View>
                 </>
@@ -178,7 +247,7 @@ const styles = StyleSheet.create({
     },
     map: {
         width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height * 0.65,
+        height: Dimensions.get('window').height * 0.5,
     },
     box: {
         backgroundColor: '#FFF',
@@ -194,29 +263,19 @@ const styles = StyleSheet.create({
         fontSize: FONT_SIZES['400'],
         color: 'black',
     },
-    status: {
-        backgroundColor: 'red',
-        width: 120,
-        alignItems: 'center',
-    },
-    fontStatus: {
-        fontFamily: FONT_MED,
-        fontSize: FONT_SIZES['500'],
-        color: 'white',
-    },
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        // alignItems: 'center',
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
     },
     flexStart: {
         flex: 0.5,
         alignItems: 'flex-start',
         marginVertical: 5,
     },
-    flexEnd: { flex: 0.5, alignItems: 'flex-end', marginVertical: 5 },
-    // currentLocation: {
-
-    // },
+    flexEnd: {
+        flex: 0.5,
+        alignItems: 'flex-end',
+        marginVertical: 5,
+    },
 });

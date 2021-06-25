@@ -1,20 +1,22 @@
 import Header from '@components/Header';
 import BackButton from '@components/Button/BackButton';
 import React from 'react';
-import { View, Image, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
 export default function ScanQRScreen(props) {
-    var track = 'ABCD-123-00-TH1';
+    // var track = 'ABCD-123-00-TH1';
+    let { traking } = props.route.params;
     createTwoButtonAlert = () =>
-        Alert.alert('เกิดข้อผิดพลาด', 'QR Code ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง', [
-            { text: 'OK', onPress: () => props.navigation.goBack() },
-        ]);
+        Alert.alert(
+            'เกิดข้อผิดพลาด',
+            'QR Code ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง',
+            [{ text: 'OK', onPress: () => props.navigation.goBack() }],
+        );
     const onSuccess = (e) => {
-        // console.log(e.data);
-        // console.log(track);
-        if (track == e.data) {
-            props.navigation.navigate('SingUpScreen', { traking: track });
+        console.log(e.data);
+        if (traking == e.data) {
+            props.navigation.navigate('SingUpScreen');
         } else {
             createTwoButtonAlert();
             console.log('error');
@@ -32,6 +34,7 @@ export default function ScanQRScreen(props) {
                 onRead={onSuccess}
                 flashMode={RNCamera.Constants.FlashMode.off}
             />
+            <Text>{traking}</Text>
         </>
     );
 }

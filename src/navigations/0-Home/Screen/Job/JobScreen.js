@@ -84,16 +84,6 @@ const styles = StyleSheet.create({
         fontSize: FONT_SIZES['400'],
         color: 'black',
     },
-    status: {
-        backgroundColor: 'red',
-        width: 120,
-        alignItems: 'center',
-    },
-    fontStatus: {
-        fontFamily: FONT_MED,
-        fontSize: FONT_SIZES['500'],
-        color: 'white',
-    },
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
