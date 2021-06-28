@@ -118,6 +118,14 @@ export default function TrakingScreen(props) {
                                 }}
                                 title="ชัย ชนะ"
                             />
+                             <Marker
+                                image={require('@assets/images/home.png')}
+                                coordinate={{
+                                    latitude: 16.2533,
+                                    longitude: 103.23738,
+                                }}
+                                title="หนึ่ง สองสาม"
+                            />
                             <Polyline
                                 coordinates={[
                                     {
@@ -259,7 +267,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     font: {
-        fontFamily: FONT_MED,
+        fontFamily: FONT_BOLD,
         fontSize: FONT_SIZES['400'],
         color: 'black',
     },

@@ -90,7 +90,7 @@ export default function TransferMoney(props) {
                     ) : (
                         <Image
                             style={styles.image}
-                            source={require('../../../../../assets/images/photo.png')}
+                            source={require('@assets/images/photo.png')}
                         />
                     )}
                 </TouchableHighlight>
@@ -103,16 +103,31 @@ export default function TransferMoney(props) {
                         }}>
                         <Icon name="university" size={30} color="black" />
                         <Picker
-                            selectedValue={selectedValue}
-                            style={styles.fontDate}
-                            onValueChange={(itemValue, itemIndex) =>
-                                setSelectedValue(itemValue)
-                            }>
-                            <Picker.Item label="โอนจากธนาคาร" value="1" />
-                            <Picker.Item label="ธนาคารไทยพาณิช" value="2" />
-                            <Picker.Item label="ธนาคารกรุงศรี" value="3" />
-                            <Picker.Item label="ธนาคารกสิกร" value="4" />
-                            <Picker.Item label="ธนาคารออมสิน" value="5" />
+                            iosHeader="Sub-Category"
+                            placeholder="โอนจากธนาคาร"
+                            placeholderStyle={{ color: 'green' }}
+                            style={{ width: 300, height: 55 }}
+                            itemStyle={{
+                                fontSize: 18,
+                                color: 'red',
+                            }}
+                            itemTextStyle={{
+                                fontSize: 18,
+                                color: 'red',
+                            }}
+                            textStyle={{
+                                fontSize: 16,
+                                color: 'red',
+                            }}
+                            onValueChange={(itemValue, itemIndex) => {
+                                setSelectedValue(itemValue);
+                                console.log(itemIndex);
+                            }}>
+                            <Picker.Item label="ธนาคารไทยพาณิช" value="1" />
+                            <Picker.Item label="ธนาคารกรุงศรี" value="2" />
+                            <Picker.Item label="ธนาคารกสิกร" value="3" />
+                            <Picker.Item label="ธนาคารออมสิน" value="4" />
+                            <Picker.Item label="ธนาคารกรุงเทพ" value="5" />
                         </Picker>
                     </View>
                 </View>
