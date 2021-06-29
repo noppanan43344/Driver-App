@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
         width: 90,
     },
     status: {
-        backgroundColor: 'red',
+        backgroundColor: 'green',
         width: 100,
         alignItems: 'center',
     },

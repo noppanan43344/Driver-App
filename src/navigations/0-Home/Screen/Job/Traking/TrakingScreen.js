@@ -13,16 +13,20 @@ import BackButton from '@components/Button/BackButton';
 import MapView, { Polyline, Marker } from 'react-native-maps';
 import GetLocation from 'react-native-get-location';
 import Loading from '@components/Loading/Loading';
-
+import Axios from 'axios';
+import { URL } from '@utils/config';
 export default function TrakingScreen(props) {
+    const [loading, setLoading] = useState(true);
+    const [orders, setOrders] = useState({});
     const [lat, setLat] = useState(0);
     const [long, setLong] = useState(0);
     useEffect(() => {
         LatLong();
     }, []);
-    const [loading, setLoading] = useState(true);
-    var x = [1, 2, 3, 4, 5, 6, 7];
+
     const LatLong = async () => {
+        const { data } = await Axios.get(URL + 'order/get-order-route/2');
+        setOrders(data);
         await GetLocation.getCurrentPosition({
             enableHighAccuracy: true,
             timeout: 15000,
@@ -76,7 +80,7 @@ export default function TrakingScreen(props) {
                                         </View>
                                         <View style={styles.flexEnd}>
                                             <Text style={styles.font}>
-                                                3 / 24 / 3
+                                                0 / {orders.result.length} / 0
                                             </Text>
                                             <Text style={styles.font}>
                                                 13 / 130 / 13
@@ -110,22 +114,17 @@ export default function TrakingScreen(props) {
                                 }}
                                 title="อยู่ดี มีสุข"
                             />
-                            <Marker
-                                image={require('@assets/images/home.png')}
-                                coordinate={{
-                                    latitude: 16.252035,
-                                    longitude: 103.237163,
-                                }}
-                                title="ชัย ชนะ"
-                            />
-                             <Marker
-                                image={require('@assets/images/home.png')}
-                                coordinate={{
-                                    latitude: 16.2533,
-                                    longitude: 103.23738,
-                                }}
-                                title="หนึ่ง สองสาม"
-                            />
+                            {orders.result.map((item, i) => (
+                                <Marker
+                                    key={i}
+                                    image={require('@assets/images/home.png')}
+                                    coordinate={{
+                                        latitude: item.latitude,
+                                        longitude: item.longitude,
+                                    }}
+                                    title={item.name}
+                                />
+                            ))}
                             <Polyline
                                 coordinates={[
                                     {
@@ -150,35 +149,27 @@ export default function TrakingScreen(props) {
                                         longitude: long,
                                     },
                                 ]}
-                                strokeColor="red" // fallback for when `strokeColors` is not supported by the map-provider
-                                strokeColors={[
-                                    '#7F0000',
-                                    '#000000', // no color, creates a "long" gradient between the previous and next coordinate
-                                    '#B24112',
-                                    '#E5845C',
-                                    '#238C23',
-                                    '#7F0000',
-                                ]}
+                                strokeColor="red" 
                                 strokeWidth={5}
                             />
                         </MapView>
                     </View>
                     <View style={{ flex: 1 }}>
                         <ScrollView>
-                            {x.length != 0 ? (
+                            {orders.result.length != 0 ? (
                                 <View
                                     style={{
                                         marginTop: 10,
                                         paddingHorizontal: 10,
                                     }}>
-                                    {x.map((value, i) => (
+                                    {orders.result.map((item, i) => (
                                         <TouchableHighlight
                                             key={i}
                                             underlayColor="null"
                                             onPress={() =>
                                                 props.navigation.navigate(
                                                     'ScanQRScreen',
-                                                    { traking: '!!' },
+                                                    { traking: i },
                                                 )
                                             }>
                                             <View style={styles.box}>
@@ -208,20 +199,19 @@ export default function TrakingScreen(props) {
                                                         style={styles.flexEnd}>
                                                         <Text
                                                             style={styles.font}>
-                                                            นพนรรณ์ เลิศนันทพร
+                                                            {item.name}
                                                         </Text>
                                                         <Text
                                                             style={styles.font}>
-                                                            0940342997
+                                                            {item.phoneNumber}
                                                         </Text>
                                                         <Text
                                                             style={styles.font}>
-                                                            ยังไม่ได้รับสินค้า
+                                                            {item.statusName}
                                                         </Text>
                                                         <Text
                                                             style={styles.font}>
-                                                            999/99 บ้านขามเรียง
-                                                            กันทรวิชัย มหาสารคาม
+                                                            {item.address}
                                                         </Text>
                                                     </View>
                                                 </View>
@@ -252,6 +242,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
     map: {
         width: Dimensions.get('window').width,
