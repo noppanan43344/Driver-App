@@ -368,6 +368,9 @@ export default function TrakingScreen(props) {
                                     <Text style={styles.font}>
                                         ไม่มีรายการที่ต้องส่ง
                                     </Text>
+                                    {/* <Button
+                                        title="onClick"
+                                        onPress={startBGLocation}></Button> */}
                                 </View>
                             )}
                         </ScrollView>
