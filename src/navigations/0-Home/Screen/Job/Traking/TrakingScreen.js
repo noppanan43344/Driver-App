@@ -17,20 +17,19 @@ import Loading from '@components/Loading/Loading';
 import Axios from 'axios';
 import { URL } from '@utils/config';
 import BackgroundGeolocation from 'react-native-background-geolocation';
+import moment from 'moment';
 export default function TrakingScreen(props) {
     const [loading, setLoading] = useState(true);
     const [orders, setOrders] = useState({});
     const [lat, setLat] = useState(0);
     const [long, setLong] = useState(0);
-    const [isMove, setIsMove] = useState(false);
-
-    // const componentWillUnmount = () => {
-    //     BackgroundGeolocation.removeListeners();
-    // };
+    const [isMove, setIsMove] = useState(true);
+    const [date, setDate] = useState();
     const onLocation = (location) => {
         console.log('[location] -', location);
         setLat(location['coords']['latitude']);
         setLong(location['coords']['longitude']);
+        setLoading(false);
     };
     const onError = (error) => {
         console.warn('[location] ERROR -', error);
@@ -47,50 +46,32 @@ export default function TrakingScreen(props) {
     };
 
     useEffect(() => {
-        currentLocation();
-        console.log('*********************************************');
-        console.log(lat);
-        console.log(long);
-
-        // This handler fires whenever bgGeo receives a location update.
+        customPosition();
+        var time = moment().format();
         BackgroundGeolocation.onLocation(onLocation, onError);
-
-        // This handler fires when movement states changes (stationary->moving; moving->stationary)
         BackgroundGeolocation.onMotionChange(onMotionChange);
-
-        // This event fires when a change in motion activity is detected
         BackgroundGeolocation.onActivityChange(onActivityChange);
-
-        // This event fires when the user toggles location-services authorization
         BackgroundGeolocation.onProviderChange(onProviderChange);
-
-        ////
-        // 2.  Execute #ready method (required)
-        //
         BackgroundGeolocation.ready(
             {
-                // Geolocation Config
                 desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-                distanceFilter: 1,
-                // Activity Recognition
+                distanceFilter: 0,
                 stopTimeout: 1,
-                // Application config
                 debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
                 logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
                 stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
                 startOnBoot: true, // <-- Auto start tracking when device is powered-up.
                 // HTTP / SQLite config
-                url: 'http://yourserver.com/locations',
+                url: URL + 'driver/post-location',
+                method: 'POST',
                 batchSync: false, // <-- [Default: false] Set true to sync locations to server in a single HTTP request.
                 autoSync: true, // <-- [Default: true] Set true to sync each location to server as it arrives.
                 headers: {
-                    // <-- Optional HTTP headers
                     'X-FOO': 'bar',
                 },
                 params: {
-                    // <-- Optional HTTP params
-                    auth_token:
-                        'maybe_your_server_authenticates_via_token_YES?',
+                    time: time,
+                    job_id: 1,
                 },
             },
             (state) => {
@@ -98,11 +79,7 @@ export default function TrakingScreen(props) {
                     '- BackgroundGeolocation is configured and ready: ',
                     state.enabled,
                 );
-
                 if (!state.enabled) {
-                    ////
-                    // 3. Start tracking!
-                    //
                     BackgroundGeolocation.start(function () {
                         console.log('- Start success');
                     });
@@ -110,64 +87,10 @@ export default function TrakingScreen(props) {
             },
         );
     }, []);
-    const currentLocation = async () => {
-        GetLocation.getCurrentPosition({
-            enableHighAccuracy: true,
-            timeout: 15000,
-        })
-            .then((location) => {
-                console.log(location);
-                setLat(location['latitude']);
-                setLong(location['longitude']);
-                setLoading(false);
-            })
-            .catch((error) => {
-                const { code, message } = error;
-                console.warn(code, message);
-            });
+    const customPosition = async () => {
+        const { data } = await Axios.get(URL + 'order/get-order-route/1');
+        setOrders(data);
     };
-    const startBGLocation = () => {
-        BackgroundGeolocation.start(function () {
-            console.log('START');
-        });
-        BackgroundGeolocation.setConfig({
-            // Geolocation Config
-            desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-            distanceFilter: 1,
-            locationUpdateInterval: 1000,
-            /*fastestLocationUpdateInterval: 1000, 
-          deferTime: 0, 
-          allowIdenticalLocations: true, */
-            // Activity Recognition
-            stopTimeout: 1,
-            // Application config
-            debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
-            logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
-            stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
-            startOnBoot: true, // <-- Auto start tracking when device is powered-up.
-            // HTTP / SQLite config
-            //TEST: 'http://192.168.1.101:8080/route-display-system/api/testLib'
-            url: URL + '/api/record_location',
-            method: 'POST',
-            batchSync: false, // <-- [Default: false] Set true to sync locations to server in a single HTTP request.
-            autoSync: true, // <-- [Default: true] Set true to sync each location to server as it arrives.
-            headers: {
-                // <-- Optional HTTP headers
-                'X-FOO': 'bar',
-            },
-            params: {
-                // <-- Optional HTTP params
-                employee_route_id: 0,
-            },
-        }).then((state) => {
-            console.log('[setConfig] success: ', state);
-        });
-    };
-    var x = [];
-    // const customPosition = async () => {
-    //     const { data } = await Axios.get(URL + 'order/get-order-route/2');
-    //     setOrders(data);
-    // };
     return (
         <>
             <Header
@@ -252,7 +175,7 @@ export default function TrakingScreen(props) {
                                 }}
                                 title="อยู่ดี มีสุข"
                             />
-                            {x.map((item, i) => (
+                            {orders.result.map((item, i) => (
                                 <Marker
                                     key={i}
                                     image={require('@assets/images/home.png')}
@@ -264,45 +187,17 @@ export default function TrakingScreen(props) {
                                 />
                             ))}
                             <Text>{lat}</Text>
-
-                            {/* <Polyline
-                                coordinates={[
-                                    {
-                                        latitude: 16.252035,
-                                        longitude: 103.237163,
-                                    },
-                                    {
-                                        latitude: 16.25214,
-                                        longitude: 103.236902,
-                                    },
-                                    { latitude: 16.2533, longitude: 103.23738 },
-                                    {
-                                        latitude: 16.253515,
-                                        longitude: 103.237375,
-                                    },
-                                    {
-                                        latitude: 16.253505,
-                                        longitude: 103.236944,
-                                    },
-                                    {
-                                        latitude: lat,
-                                        longitude: long,
-                                    },
-                                ]}
-                                strokeColor="red"
-                                strokeWidth={5}
-                            /> */}
                         </MapView>
                     </View>
                     <View style={{ flex: 1 }}>
                         <ScrollView>
-                            {x.length != 0 ? (
+                            {orders.result.length != 0 ? (
                                 <View
                                     style={{
                                         marginTop: 10,
                                         paddingHorizontal: 10,
                                     }}>
-                                    {x.map((item, i) => (
+                                    {orders.result.map((item, i) => (
                                         <TouchableHighlight
                                             key={i}
                                             underlayColor="null"
@@ -370,7 +265,10 @@ export default function TrakingScreen(props) {
                                     </Text>
                                     {/* <Button
                                         title="onClick"
-                                        onPress={startBGLocation}></Button> */}
+                                        onPress={startBGLocation}></Button>
+                                    <Button
+                                        title="onClick2"
+                                        onPress={ismoving}></Button> */}
                                 </View>
                             )}
                         </ScrollView>
@@ -428,3 +326,52 @@ const styles = StyleSheet.create({
         marginVertical: 5,
     },
 });
+
+// const currentLocation = async () => {
+//     GetLocation.getCurrentPosition({
+//         enableHighAccuracy: true,
+//         timeout: 15000,
+//     })
+//         .then((location) => {
+//             setLat(location['latitude']);
+//             setLong(location['longitude']);
+//             setLoading(false);
+//         })
+//         .catch((error) => {
+//             const { code, message } = error;
+//             console.warn(code, message);
+//         });
+// };
+{
+    /* <Polyline
+                                coordinates={[
+                                    {
+                                        latitude: 16.252035,
+                                        longitude: 103.237163,
+                                    },
+                                    {
+                                        latitude: 16.25214,
+                                        longitude: 103.236902,
+                                    },
+                                    { latitude: 16.2533, longitude: 103.23738 },
+                                    {
+                                        latitude: 16.253515,
+                                        longitude: 103.237375,
+                                    },
+                                    {
+                                        latitude: 16.253505,
+                                        longitude: 103.236944,
+                                    },
+                                    {
+                                        latitude: lat,
+                                        longitude: long,
+                                    },
+                                ]}
+                                strokeColor="red"
+                                strokeWidth={5}
+                            /> */
+}
+// const customPosition = async () => {
+//     const { data } = await Axios.get(URL + 'order/get-order-route/2');
+//     setOrders(data);
+// };
