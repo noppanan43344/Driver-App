@@ -12,7 +12,6 @@ import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
 import Header from '@components/Header';
 import BackButton from '@components/Button/BackButton';
 import MapView, { Polyline, Marker } from 'react-native-maps';
-import GetLocation from 'react-native-get-location';
 import Loading from '@components/Loading/Loading';
 import Axios from 'axios';
 import { URL } from '@utils/config';
@@ -23,8 +22,6 @@ export default function TrakingScreen(props) {
     const [orders, setOrders] = useState({});
     const [lat, setLat] = useState(0);
     const [long, setLong] = useState(0);
-    const [isMove, setIsMove] = useState(true);
-    const [date, setDate] = useState();
     const onLocation = (location) => {
         console.log('[location] -', location);
         setLat(location['coords']['latitude']);
@@ -46,6 +43,15 @@ export default function TrakingScreen(props) {
     };
 
     useEffect(() => {
+        const unsub = props.navigation.addListener('focus', () => {
+            console.log('useEffect');
+            bgGeoLocation();
+        });
+        return unsub;
+    }, [props.navigation]);
+    var x = [];
+
+    const bgGeoLocation = async () => {
         customPosition();
         var time = moment().format();
         BackgroundGeolocation.onLocation(onLocation, onError);
@@ -55,9 +61,9 @@ export default function TrakingScreen(props) {
         BackgroundGeolocation.ready(
             {
                 desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-                distanceFilter: 0,
+                distanceFilter: 0.5,
                 stopTimeout: 1,
-                debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
+                // debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
                 logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
                 stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
                 startOnBoot: true, // <-- Auto start tracking when device is powered-up.
@@ -86,7 +92,7 @@ export default function TrakingScreen(props) {
                 }
             },
         );
-    }, []);
+    };
     const customPosition = async () => {
         const { data } = await Axios.get(URL + 'order/get-order-route/1');
         setOrders(data);
@@ -119,6 +125,7 @@ export default function TrakingScreen(props) {
                                 <View style={styles.box}>
                                     <View style={styles.row}>
                                         <View style={styles.flexStart}>
+                                            <Text style={styles.font}> </Text>
                                             <Text style={styles.font}>
                                                 สินค้าที่ส่ง (จำนวน)
                                             </Text>
@@ -133,18 +140,91 @@ export default function TrakingScreen(props) {
                                             </Text>
                                         </View>
                                         <View style={styles.flexEnd}>
-                                            <Text style={styles.font}>
-                                                0 / 0 / 0
-                                            </Text>
-                                            <Text style={styles.font}>
-                                                13 / 130 / 13
-                                            </Text>
-                                            <Text style={styles.font}>
-                                                0.30 / 6.30 / 0.30
-                                            </Text>
-                                            <Text style={styles.font}>
-                                                30.50 / 325 / 30.50
-                                            </Text>
+                                            <View style={styles.rowFont}>
+                                                <Text style={styles.fontGreen}>
+                                                    เสร็จ
+                                                </Text>
+                                                <Text style={styles.font}>
+                                                    /
+                                                </Text>
+                                                <Text style={styles.fontRed}>
+                                                    ต้องทำ
+                                                </Text>
+                                                <Text style={styles.font}>
+                                                    /
+                                                </Text>
+                                                <Text style={styles.fontOrange}>
+                                                    รวม
+                                                </Text>
+                                            </View>
+                                            <View style={styles.rowFont}>
+                                                <Text style={styles.fontGreen}>
+                                                    10
+                                                </Text>
+                                                <Text style={styles.font}>
+                                                    /
+                                                </Text>
+                                                <Text style={styles.fontRed}>
+                                                    20
+                                                </Text>
+                                                <Text style={styles.font}>
+                                                    /
+                                                </Text>
+                                                <Text style={styles.fontOrange}>
+                                                    10
+                                                </Text>
+                                            </View>
+                                            <View style={styles.rowFont}>
+                                                <Text style={styles.fontGreen}>
+                                                    35
+                                                </Text>
+                                                <Text style={styles.font}>
+                                                    /
+                                                </Text>
+                                                <Text style={styles.fontRed}>
+                                                    87
+                                                </Text>
+                                                <Text style={styles.font}>
+                                                    /
+                                                </Text>
+                                                <Text style={styles.fontOrange}>
+                                                    35
+                                                </Text>
+                                            </View>
+                                            <View style={styles.rowFont}>
+                                                <Text style={styles.fontGreen}>
+                                                    02:30
+                                                </Text>
+                                                <Text style={styles.font}>
+                                                    /
+                                                </Text>
+                                                <Text style={styles.fontRed}>
+                                                    08:50
+                                                </Text>
+                                                <Text style={styles.font}>
+                                                    /
+                                                </Text>
+                                                <Text style={styles.fontOrange}>
+                                                    02:30
+                                                </Text>
+                                            </View>
+                                            <View style={styles.rowFont}>
+                                                <Text style={styles.fontGreen}>
+                                                    70.00
+                                                </Text>
+                                                <Text style={styles.font}>
+                                                    /
+                                                </Text>
+                                                <Text style={styles.fontRed}>
+                                                    174.00
+                                                </Text>
+                                                <Text style={styles.font}>
+                                                    /
+                                                </Text>
+                                                <Text style={styles.fontOrange}>
+                                                    70.00
+                                                </Text>
+                                            </View>
                                         </View>
                                     </View>
                                 </View>
@@ -186,7 +266,6 @@ export default function TrakingScreen(props) {
                                     title={item.name}
                                 />
                             ))}
-                            <Text>{lat}</Text>
                         </MapView>
                     </View>
                     <View style={{ flex: 1 }}>
@@ -208,6 +287,17 @@ export default function TrakingScreen(props) {
                                                 )
                                             }>
                                             <View style={styles.box}>
+                                                <View
+                                                    style={{
+                                                        alignItems: 'center',
+                                                    }}>
+                                                    <Text style={styles.font}>
+                                                        เริ่ม / ถึง / จริง
+                                                    </Text>
+                                                    <Text style={styles.font}>
+                                                        12:30 / 13:00 / 12:58
+                                                    </Text>
+                                                </View>
                                                 <View style={styles.row}>
                                                     <View
                                                         style={
@@ -227,6 +317,14 @@ export default function TrakingScreen(props) {
                                                         </Text>
                                                         <Text
                                                             style={styles.font}>
+                                                            ระยะทาง
+                                                        </Text>
+                                                        <Text
+                                                            style={styles.font}>
+                                                            เวลา
+                                                        </Text>
+                                                        <Text
+                                                            style={styles.font}>
                                                             ที่อยู่
                                                         </Text>
                                                     </View>
@@ -243,6 +341,14 @@ export default function TrakingScreen(props) {
                                                         <Text
                                                             style={styles.font}>
                                                             {item.statusName}
+                                                        </Text>
+                                                        <Text
+                                                            style={styles.font}>
+                                                            10 กิโลเมตร
+                                                        </Text>
+                                                        <Text
+                                                            style={styles.font}>
+                                                            0 ชั่วโมง 20 นาที
                                                         </Text>
                                                         <Text
                                                             style={styles.font}>
@@ -310,6 +416,21 @@ const styles = StyleSheet.create({
         fontSize: FONT_SIZES['400'],
         color: 'black',
     },
+    fontGreen: {
+        fontFamily: FONT_BOLD,
+        fontSize: FONT_SIZES['400'],
+        color: 'green',
+    },
+    fontRed: {
+        fontFamily: FONT_BOLD,
+        fontSize: FONT_SIZES['400'],
+        color: 'red',
+    },
+    fontOrange: {
+        fontFamily: FONT_BOLD,
+        fontSize: FONT_SIZES['400'],
+        color: 'orange',
+    },
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -325,6 +446,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         marginVertical: 5,
     },
+    rowFont: { flexDirection: 'row', justifyContent: 'space-between' },
 });
 
 // const currentLocation = async () => {
