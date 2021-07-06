@@ -6,10 +6,10 @@ import {
     TouchableHighlight,
     StyleSheet,
     Dimensions,
-    Button,
+    Switch,
 } from 'react-native';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
-import Header from '@components/Header';
+// import Header from '@components/Header';
 import BackButton from '@components/Button/BackButton';
 import MapView, { Polyline, Marker } from 'react-native-maps';
 import Loading from '@components/Loading/Loading';
@@ -17,28 +17,35 @@ import Axios from 'axios';
 import { URL } from '@utils/config';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import moment from 'moment';
+import { Header } from 'react-native-elements';
 export default function TrakingScreen(props) {
     const [loading, setLoading] = useState(true);
     const [orders, setOrders] = useState({});
+    const [isPolyline, setIsPolyline] = useState({});
+    const [isWayPoint, setIsWayPoint] = useState({});
     const [lat, setLat] = useState(0);
     const [long, setLong] = useState(0);
+    const [time, setTime] = useState();
+    const [isEnabled, setIsEnabled] = useState(false);
+    const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
     const onLocation = (location) => {
-        console.log('[location] -', location);
+        // console.log('[location] -', location);
         setLat(location['coords']['latitude']);
         setLong(location['coords']['longitude']);
-        setLoading(false);
+        var timezone = moment().format();
+        setTime(timezone);
     };
     const onError = (error) => {
-        console.warn('[location] ERROR -', error);
+        // console.warn('[location] ERROR -', error);
     };
     const onActivityChange = (event) => {
-        console.log('[activitychange] -', event); // eg: 'on_foot', 'still', 'in_vehicle'
+        // console.log('[activitychange] -', event); // eg: 'on_foot', 'still', 'in_vehicle'
     };
     const onProviderChange = (provider) => {
-        console.log('[providerchange] -', provider.enabled, provider.status);
+        // console.log('[providerchange] -', provider.enabled, provider.status);
     };
     const onMotionChange = (event) => {
-        console.log('[motionchange] -', event.isMoving, event.location);
+        // console.log('[motionchange] -', event.isMoving, event.location);
         // setLoading(false);
     };
 
@@ -49,21 +56,20 @@ export default function TrakingScreen(props) {
         });
         return unsub;
     }, [props.navigation]);
-    var x = [];
 
     const bgGeoLocation = async () => {
-        customPosition();
-        var time = moment().format();
+        isPoly();
         BackgroundGeolocation.onLocation(onLocation, onError);
         BackgroundGeolocation.onMotionChange(onMotionChange);
         BackgroundGeolocation.onActivityChange(onActivityChange);
         BackgroundGeolocation.onProviderChange(onProviderChange);
+        BackgroundGeolocation.changePace(true);
         BackgroundGeolocation.ready(
             {
                 desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-                distanceFilter: 0.5,
+                distanceFilter: 0,
                 stopTimeout: 1,
-                // debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
+                debug: false, // <-- enable this hear sounds for background-geolocation life-cycle.
                 logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
                 stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
                 startOnBoot: true, // <-- Auto start tracking when device is powered-up.
@@ -93,20 +99,73 @@ export default function TrakingScreen(props) {
             },
         );
     };
-    const customPosition = async () => {
-        const { data } = await Axios.get(URL + 'order/get-order-route/1');
-        setOrders(data);
+    const isPoly = async () => {
+        const { data } = await Axios.get(
+            'http://192.168.1.33:8080/ltl-scen1-dev/provider/findordermoc'
+        );
+        var _waypoint = [];
+        var marker = [];
+        var _polyline = [];
+        data.result.order.map((value, index) => {
+            marker.push({
+                latitude: value.lat,
+                longitude: value.lng,
+                name: value.firstname + ' ' + value.lastname,
+                phoneNumber: value.phoneNumber,
+                address:
+                    value.address +
+                    ' ' +
+                    value.tambon +
+                    ' ' +
+                    value.amphur +
+                    ' ' +
+                    value.province,
+            });
+            _polyline.push({
+                latitude: value.lat,
+                longitude: value.lng,
+            });
+            value.location.map((v, i) => {
+                _waypoint.push({
+                    latitude: v[1],
+                    longitude: v[0],
+                });
+            });
+        });
+        setOrders(marker);
+        setIsPolyline(_polyline);
+        setIsWayPoint(_waypoint);
+        setLoading(false);
     };
     return (
         <>
             <Header
-                title="เส้นทาง"
+                placement="left"
                 leftComponent={
                     <BackButton
                         onPress={() => {
                             props.navigation.goBack();
                         }}
                     />
+                }
+                centerComponent={{
+                    text: 'เส้นทาง',
+                    style: {
+                        color: 'white',
+                        fontFamily: FONT_BOLD,
+                        fontSize: FONT_SIZES['500'],
+                    },
+                }}
+                rightComponent={
+                    <View style={{ marginTop: 5 }}>
+                        <Switch
+                            trackColor={{ false: '#767577', true: '#ffffff' }}
+                            thumbColor={isEnabled ? '#767577' : '#ffffff'}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={toggleSwitch}
+                            value={isEnabled}
+                        />
+                    </View>
                 }
             />
             {loading ? (
@@ -147,7 +206,7 @@ export default function TrakingScreen(props) {
                                                 <Text style={styles.font}>
                                                     /
                                                 </Text>
-                                                <Text style={styles.fontRed}>
+                                                <Text style={styles.fontBlue}>
                                                     ต้องทำ
                                                 </Text>
                                                 <Text style={styles.font}>
@@ -164,7 +223,7 @@ export default function TrakingScreen(props) {
                                                 <Text style={styles.font}>
                                                     /
                                                 </Text>
-                                                <Text style={styles.fontRed}>
+                                                <Text style={styles.fontBlue}>
                                                     20
                                                 </Text>
                                                 <Text style={styles.font}>
@@ -181,7 +240,7 @@ export default function TrakingScreen(props) {
                                                 <Text style={styles.font}>
                                                     /
                                                 </Text>
-                                                <Text style={styles.fontRed}>
+                                                <Text style={styles.fontBlue}>
                                                     87
                                                 </Text>
                                                 <Text style={styles.font}>
@@ -198,7 +257,7 @@ export default function TrakingScreen(props) {
                                                 <Text style={styles.font}>
                                                     /
                                                 </Text>
-                                                <Text style={styles.fontRed}>
+                                                <Text style={styles.fontBlue}>
                                                     08:50
                                                 </Text>
                                                 <Text style={styles.font}>
@@ -215,7 +274,7 @@ export default function TrakingScreen(props) {
                                                 <Text style={styles.font}>
                                                     /
                                                 </Text>
-                                                <Text style={styles.fontRed}>
+                                                <Text style={styles.fontBlue}>
                                                     174.00
                                                 </Text>
                                                 <Text style={styles.font}>
@@ -231,52 +290,92 @@ export default function TrakingScreen(props) {
                             </View>
                         </ScrollView>
                     </View>
-                    <View style={styles.container}>
-                        <MapView
-                            style={styles.map}
-                            region={{
-                                latitude: lat,
-                                longitude: long,
-                                latitudeDelta: 0.015,
-                                longitudeDelta: 0.015,
-                            }}
-                            // initialRegion={{
-                            //     latitude: lat,
-                            //     longitude: long,
-                            //     latitudeDelta: 0.015,
-                            //     longitudeDelta: 0.015,
-                            // }}
-                        >
-                            <Marker
-                                image={require('@assets/images/mark.png')}
-                                coordinate={{
+                    {!isEnabled ? (
+                        <View style={styles.container}>
+                            <MapView
+                                style={styles.map}
+                                region={{
                                     latitude: lat,
                                     longitude: long,
+                                    latitudeDelta: 0.015,
+                                    longitudeDelta: 0.015,
                                 }}
-                                title="อยู่ดี มีสุข"
-                            />
-                            {orders.result.map((item, i) => (
+                            >
                                 <Marker
-                                    key={i}
-                                    image={require('@assets/images/home.png')}
+                                    image={require('@assets/images/mark.png')}
                                     coordinate={{
-                                        latitude: item.latitude,
-                                        longitude: item.longitude,
+                                        latitude: lat,
+                                        longitude: long,
                                     }}
-                                    title={item.name}
+                                    // title="อยู่ดี มีสุข"
                                 />
-                            ))}
-                        </MapView>
-                    </View>
+                                {orders.map((item, i) => (
+                                    <Marker
+                                        key={i}
+                                        image={require('@assets/images/home.png')}
+                                        coordinate={{
+                                            latitude: item.latitude,
+                                            longitude: item.longitude,
+                                        }}
+                                        title={item.name}
+                                    />
+                                ))}
+                                <Polyline
+                                    coordinates={isWayPoint}
+                                    geodesic={false}
+                                    strokeColor="blue"
+                                    strokeWidth={5}
+                                    lineDashPattern={null}
+                                />
+                            </MapView>
+                        </View>
+                    ) : (
+                        <View style={styles.container}>
+                            <MapView
+                                style={styles.map}
+                                initialRegion={{
+                                    latitude: lat,
+                                    longitude: long,
+                                    latitudeDelta: 0.015,
+                                    longitudeDelta: 0.015,
+                                }}>
+                                <Marker
+                                    image={require('@assets/images/mark.png')}
+                                    coordinate={{
+                                        latitude: lat,
+                                        longitude: long,
+                                    }}
+                                    // title="อยู่ดี มีสุข"
+                                />
+                                {orders.map((item, i) => (
+                                    <Marker
+                                        key={i}
+                                        image={require('@assets/images/home.png')}
+                                        coordinate={{
+                                            latitude: item.latitude,
+                                            longitude: item.longitude,
+                                        }}
+                                        title={item.name}
+                                    />
+                                ))}
+                                <Polyline
+                                    coordinates={isPolyline}
+                                    strokeColor="red"
+                                    strokeWidth={5}
+                                />
+                            </MapView>
+                        </View>
+                    )}
+
                     <View style={{ flex: 1 }}>
                         <ScrollView>
-                            {orders.result.length != 0 ? (
+                            {orders.length != 0 ? (
                                 <View
                                     style={{
                                         marginTop: 10,
                                         paddingHorizontal: 10,
                                     }}>
-                                    {orders.result.map((item, i) => (
+                                    {orders.map((item, i) => (
                                         <TouchableHighlight
                                             key={i}
                                             underlayColor="null"
@@ -421,10 +520,10 @@ const styles = StyleSheet.create({
         fontSize: FONT_SIZES['400'],
         color: 'green',
     },
-    fontRed: {
+    fontBlue: {
         fontFamily: FONT_BOLD,
         fontSize: FONT_SIZES['400'],
-        color: 'red',
+        color: 'blue',
     },
     fontOrange: {
         fontFamily: FONT_BOLD,
@@ -448,52 +547,3 @@ const styles = StyleSheet.create({
     },
     rowFont: { flexDirection: 'row', justifyContent: 'space-between' },
 });
-
-// const currentLocation = async () => {
-//     GetLocation.getCurrentPosition({
-//         enableHighAccuracy: true,
-//         timeout: 15000,
-//     })
-//         .then((location) => {
-//             setLat(location['latitude']);
-//             setLong(location['longitude']);
-//             setLoading(false);
-//         })
-//         .catch((error) => {
-//             const { code, message } = error;
-//             console.warn(code, message);
-//         });
-// };
-{
-    /* <Polyline
-                                coordinates={[
-                                    {
-                                        latitude: 16.252035,
-                                        longitude: 103.237163,
-                                    },
-                                    {
-                                        latitude: 16.25214,
-                                        longitude: 103.236902,
-                                    },
-                                    { latitude: 16.2533, longitude: 103.23738 },
-                                    {
-                                        latitude: 16.253515,
-                                        longitude: 103.237375,
-                                    },
-                                    {
-                                        latitude: 16.253505,
-                                        longitude: 103.236944,
-                                    },
-                                    {
-                                        latitude: lat,
-                                        longitude: long,
-                                    },
-                                ]}
-                                strokeColor="red"
-                                strokeWidth={5}
-                            /> */
-}
-// const customPosition = async () => {
-//     const { data } = await Axios.get(URL + 'order/get-order-route/2');
-//     setOrders(data);
-// };
