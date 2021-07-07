@@ -29,23 +29,25 @@ export default function TrakingScreen(props) {
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
     const onLocation = (location) => {
-        console.log('[location] -', location);
+        // console.log('[location] -', location);
         setLat(location['coords']['latitude']);
         setLong(location['coords']['longitude']);
         var timezone = moment().format();
+        // console.log('timezone' + timezone);
+        // console.log('time' + time);
         setTime(timezone);
     };
     const onError = (error) => {
-        console.warn('[location] ERROR -', error);
+        // console.warn('[location] ERROR -', error);
     };
     const onActivityChange = (event) => {
-        console.log('[activitychange] -', event); // eg: 'on_foot', 'still', 'in_vehicle'
+        // console.log('[activitychange] -', event); // eg: 'on_foot', 'still', 'in_vehicle'
     };
     const onProviderChange = (provider) => {
-        console.log('[providerchange] -', provider.enabled, provider.status);
+        // console.log('[providerchange] -', provider.enabled, provider.status);
     };
     const onMotionChange = (event) => {
-        console.log('[motionchange] -', event.isMoving, event.location);
+        // console.log('[motionchange] -', event.isMoving, event.location);
         // setLoading(false);
     };
 
@@ -59,6 +61,7 @@ export default function TrakingScreen(props) {
 
     const bgGeoLocation = async () => {
         isPoly();
+        
         BackgroundGeolocation.onLocation(onLocation, onError);
         BackgroundGeolocation.onMotionChange(onMotionChange);
         BackgroundGeolocation.onActivityChange(onActivityChange);
@@ -68,7 +71,7 @@ export default function TrakingScreen(props) {
             {
                 desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
                 distanceFilter: 0,
-                stopTimeout: 1,
+                stopTimeout: 5,
                 debug: false, // <-- enable this hear sounds for background-geolocation life-cycle.
                 logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
                 stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
@@ -82,7 +85,7 @@ export default function TrakingScreen(props) {
                     'X-FOO': 'bar',
                 },
                 params: {
-                    time: time,
+                    time: moment().format(),
                     job_id: 1,
                 },
             },
@@ -131,6 +134,10 @@ export default function TrakingScreen(props) {
                     longitude: v[0],
                 });
             });
+        });
+        _polyline.push({
+            latitude: data.result.order[0].lat,
+            longitude: data.result.order[0].lng,
         });
         setOrders(marker);
         setIsPolyline(_polyline);
@@ -290,15 +297,15 @@ export default function TrakingScreen(props) {
                             </View>
                         </ScrollView>
                     </View>
-                    {isEnabled == false ? (
-                        <View style={styles.container}>
+                    <View style={styles.container}>
+                        {!isEnabled ? (
                             <MapView
                                 style={styles.map}
                                 region={{
                                     latitude: lat,
                                     longitude: long,
-                                    latitudeDelta: 0.015,
-                                    longitudeDelta: 0.015,
+                                    latitudeDelta: 0.01,
+                                    longitudeDelta: 0.01,
                                 }}>
                                 <Marker
                                     image={require('@assets/images/mark.png')}
@@ -306,7 +313,13 @@ export default function TrakingScreen(props) {
                                         latitude: lat,
                                         longitude: long,
                                     }}
-                                    // title="อยู่ดี มีสุข"
+                                />
+
+                                <Polyline
+                                    coordinates={isWayPoint}
+                                    strokeColor="blue"
+                                    strokeWidth={5}
+                                    lineDashPattern={[10, 10]}
                                 />
                                 {orders.map((item, i) => (
                                     <Marker
@@ -319,17 +332,8 @@ export default function TrakingScreen(props) {
                                         title={item.name}
                                     />
                                 ))}
-                                <Polyline
-                                    coordinates={isWayPoint}
-                                    geodesic={false}
-                                    strokeColor="blue"
-                                    strokeWidth={5}
-                                    lineDashPattern={[5, 7]}
-                                />
                             </MapView>
-                        </View>
-                    ) : (
-                        <View style={styles.container}>
+                        ) : (
                             <MapView
                                 style={styles.map}
                                 initialRegion={{
@@ -344,7 +348,6 @@ export default function TrakingScreen(props) {
                                         latitude: lat,
                                         longitude: long,
                                     }}
-                                    // title="อยู่ดี มีสุข"
                                 />
                                 {orders.map((item, i) => (
                                     <Marker
@@ -359,14 +362,12 @@ export default function TrakingScreen(props) {
                                 ))}
                                 <Polyline
                                     coordinates={isPolyline}
-                                    strokeColor="red"
+                                    strokeColor="green"
                                     strokeWidth={5}
-                                    lineDashPattern={[5, 0]}
                                 />
                             </MapView>
-                        </View>
-                    )}
-
+                        )}
+                    </View>
                     <View style={{ flex: 1 }}>
                         <ScrollView>
                             {orders.length != 0 ? (
@@ -468,12 +469,6 @@ export default function TrakingScreen(props) {
                                     <Text style={styles.font}>
                                         ไม่มีรายการที่ต้องส่ง
                                     </Text>
-                                    {/* <Button
-                                        title="onClick"
-                                        onPress={startBGLocation}></Button>
-                                    <Button
-                                        title="onClick2"
-                                        onPress={ismoving}></Button> */}
                                 </View>
                             )}
                         </ScrollView>
