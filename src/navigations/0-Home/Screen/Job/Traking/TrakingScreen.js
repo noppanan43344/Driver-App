@@ -22,10 +22,12 @@ export default function TrakingScreen(props) {
     const [loading, setLoading] = useState(true);
     const [orders, setOrders] = useState({});
     const [isPolyline, setIsPolyline] = useState({});
-    const [isWayPoint, setIsWayPoint] = useState({});
+    const [isWayPoint, setIsWayPoint] = useState([]);
     const [lat, setLat] = useState(0);
     const [long, setLong] = useState(0);
     const [time, setTime] = useState();
+    const [isColor, setIsColor] = useState([]);
+    const [location, setLocation] = useState({});
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
     const onLocation = (location) => {
@@ -54,15 +56,14 @@ export default function TrakingScreen(props) {
     useEffect(() => {
         const unsub = props.navigation.addListener('focus', () => {
             console.log('useEffect');
-            console.log();
             bgGeoLocation();
         });
         return unsub;
     }, [props.navigation]);
 
     const bgGeoLocation = async () => {
-        isPoly();
-        
+        getlocation();
+
         BackgroundGeolocation.onLocation(onLocation, onError);
         BackgroundGeolocation.onMotionChange(onMotionChange);
         BackgroundGeolocation.onActivityChange(onActivityChange);
@@ -103,48 +104,63 @@ export default function TrakingScreen(props) {
             },
         );
     };
-    const isPoly = async () => {
+    const getlocation = async () => {
         const { data } = await Axios.get(
             'http://192.168.1.73:8080/ltl-scen1-dev/provider/findordermoc',
         );
-        var _waypoint = [];
+        let waypoints = [];
+        var polylines = [];
         var marker = [];
-        var _polyline = [];
-        data.result.order.map((value, index) => {
+        data.result.order.map((val, i) => {
             marker.push({
-                latitude: value.lat,
-                longitude: value.lng,
-                name: value.firstname + ' ' + value.lastname,
-                phoneNumber: value.phoneNumber,
+                latitude: val.lat,
+                longitude: val.lng,
+                name: val.firstname + ' ' + val.lastname,
+                phoneNumber: val.phoneNumber,
                 address:
-                    value.address +
+                    val.address +
                     ' ' +
-                    value.tambon +
+                    val.tambon +
                     ' ' +
-                    value.amphur +
+                    val.amphur +
                     ' ' +
-                    value.province,
+                    val.province,
             });
-            _polyline.push({
-                latitude: value.lat,
-                longitude: value.lng,
-            });
-            value.location.map((v, i) => {
-                _waypoint.push({
-                    latitude: v[1],
-                    longitude: v[0],
+            let waypoint = [];
+            val.location.map((val, i) => {
+                waypoint.push({
+                    latitude: val[1],
+                    longitude: val[0],
                 });
             });
+            waypoints.push(waypoint);
+
+            polylines.push({
+                latitude: val.lat,
+                longitude: val.lng,
+            });
         });
-        _polyline.push({
+        polylines.push({
             latitude: data.result.order[0].lat,
             longitude: data.result.order[0].lng,
         });
+        const colors = [
+            '#63b598',
+            '#ce7d78',
+            '#ea9e70',
+            '#a48a9e',
+            '#f50422',
+            '#648177',
+            '#0d5ac1',
+        ];
+        setIsColor(colors);
+        setIsWayPoint(waypoints);
+        setIsPolyline(polylines);
+        setLocation(data);
         setOrders(marker);
-        setIsPolyline(_polyline);
-        setIsWayPoint(_waypoint);
         setLoading(false);
     };
+
     return (
         <>
             <Header
@@ -315,23 +331,28 @@ export default function TrakingScreen(props) {
                                         longitude: long,
                                     }}
                                 />
-
-                                <Polyline
-                                    coordinates={isWayPoint}
-                                    strokeColor="blue"
-                                    strokeWidth={5}
-                                    lineDashPattern={[10, 10]}
-                                />
-                                {orders.map((item, i) => (
-                                    <Marker
-                                        key={i}
-                                        image={require('@assets/images/home.png')}
-                                        coordinate={{
-                                            latitude: item.latitude,
-                                            longitude: item.longitude,
-                                        }}
-                                        title={item.name}
-                                    />
+                                {location.result.order.map((val, i) => (
+                                    <>
+                                        <Polyline
+                                            coordinates={isWayPoint[i]}
+                                            strokeColor={isColor[i]}
+                                            strokeWidth={5}
+                                            lineDashPattern={[5, 7]}
+                                        />
+                                        <Marker
+                                            key={i}
+                                            image={require('@assets/images/home.png')}
+                                            coordinate={{
+                                                latitude: val.lat,
+                                                longitude: val.lng,
+                                            }}
+                                            title={
+                                                val.firstname +
+                                                ' ' +
+                                                val.lastname
+                                            }
+                                        />
+                                    </>
                                 ))}
                             </MapView>
                         ) : (
@@ -350,22 +371,28 @@ export default function TrakingScreen(props) {
                                         longitude: long,
                                     }}
                                 />
-                                {orders.map((item, i) => (
-                                    <Marker
-                                        key={i}
-                                        image={require('@assets/images/home.png')}
-                                        coordinate={{
-                                            latitude: item.latitude,
-                                            longitude: item.longitude,
-                                        }}
-                                        title={item.name}
-                                    />
-                                ))}
                                 <Polyline
                                     coordinates={isPolyline}
-                                    strokeColor="green"
+                                    strokeColor="red"
                                     strokeWidth={5}
                                 />
+                                {location.result.order.map((val, i) => (
+                                    <>
+                                        <Marker
+                                            key={i}
+                                            image={require('@assets/images/home.png')}
+                                            coordinate={{
+                                                latitude: val.lat,
+                                                longitude: val.lng,
+                                            }}
+                                            title={
+                                                val.firstname +
+                                                ' ' +
+                                                val.lastname
+                                            }
+                                        />
+                                    </>
+                                ))}
                             </MapView>
                         )}
                     </View>
