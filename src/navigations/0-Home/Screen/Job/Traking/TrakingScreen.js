@@ -54,6 +54,7 @@ export default function TrakingScreen(props) {
     useEffect(() => {
         const unsub = props.navigation.addListener('focus', () => {
             console.log('useEffect');
+            console.log();
             bgGeoLocation();
         });
         return unsub;
