@@ -27,6 +27,12 @@ export default function TrakingScreen(props) {
     const [long, setLong] = useState(0);
     const [time, setTime] = useState();
     const [isEnabled, setIsEnabled] = useState(false);
+
+    const [location, setLocation] = useState({});
+    const [waypoint, setWaypoint] = useState([]);
+    const [color,setcolor] = useState([]);
+
+
     const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
     const onLocation = (location) => {
         console.log('[location] -', location);
@@ -53,12 +59,33 @@ export default function TrakingScreen(props) {
         const unsub = props.navigation.addListener('focus', () => {
             console.log('useEffect');
             bgGeoLocation();
+            getlocation();
         });
         return unsub;
     }, [props.navigation]);
+//========================== Best Func =================================
+    const getlocation = async()=>{
+        const { data } = await Axios.get('http://192.168.1.33:8080/ltl-scen1-dev/provider/findordermoc');
+        let waypoints = []
+        data.result.order.map((val,i)=>{
+            let waypoint = []
+            val.location.map((val,i)=>{
+                waypoint.push({
+                    latitude: val[1],
+                    longitude: val[0],
+                });
+            })
+            waypoints.push(waypoint)
+        })
+        const colors= ["#63b598", "#ce7d78", "#ea9e70", "#a48a9e", "#f50422", "#648177" ,"#0d5ac1"]
+        setcolor(colors);
+        setWaypoint(waypoints);
+        setLocation(data);
+        setLoading(false);
+    }
 
     const bgGeoLocation = async () => {
-        isPoly();
+        //isPoly();
         BackgroundGeolocation.onLocation(onLocation, onError);
         BackgroundGeolocation.onMotionChange(onMotionChange);
         BackgroundGeolocation.onActivityChange(onActivityChange);
@@ -101,7 +128,7 @@ export default function TrakingScreen(props) {
     };
     const isPoly = async () => {
         const { data } = await Axios.get(
-            'http://192.168.1.73:8080/ltl-scen1-dev/provider/findordermoc',
+            'http://192.168.1.33:8080/ltl-scen1-dev/provider/findordermoc',
         );
         var _waypoint = [];
         var marker = [];
@@ -295,37 +322,36 @@ export default function TrakingScreen(props) {
                             <MapView
                                 style={styles.map}
                                 region={{
-                                    latitude: lat,
-                                    longitude: long,
+                                    latitude: 16.246040662984942,
+                                    longitude: 103.24808449520349,
                                     latitudeDelta: 0.015,
                                     longitudeDelta: 0.015,
                                 }}>
-                                <Marker
-                                    image={require('@assets/images/mark.png')}
-                                    coordinate={{
-                                        latitude: lat,
-                                        longitude: long,
-                                    }}
-                                    // title="อยู่ดี มีสุข"
-                                />
-                                {orders.map((item, i) => (
+                                {
+                                location.result.order.map((val,i)=>( 
+                                    
+                                    <>
                                     <Marker
-                                        key={i}
-                                        image={require('@assets/images/home.png')}
+                                    key={i}
+                                        image={require('@assets/images/mark.png')}
                                         coordinate={{
-                                            latitude: item.latitude,
-                                            longitude: item.longitude,
+                                            latitude: val.lat,
+                                            longitude: val.lng,
                                         }}
-                                        title={item.name}
+                                        // title="อยู่ดี มีสุข"
                                     />
-                                ))}
-                                <Polyline
-                                    coordinates={isWayPoint}
-                                    geodesic={false}
-                                    strokeColor="blue"
-                                    strokeWidth={5}
-                                    lineDashPattern={[5, 7]}
-                                />
+                                    <Polyline
+                                         coordinates={waypoint[i]}
+                                         geodesic={false}
+                                         strokeColor={color[i]}
+                                         strokeWidth={5}
+                                        lineDashPattern={[5, 7]}
+                                    />
+                                    </>
+                                    )
+                                           )} 
+                                 
+                                
                             </MapView>
                         </View>
                     ) : (
@@ -333,20 +359,20 @@ export default function TrakingScreen(props) {
                             <MapView
                                 style={styles.map}
                                 initialRegion={{
-                                    latitude: lat,
-                                    longitude: long,
+                                    latitude: 16.246040662984942,
+                                    longitude: 103.24808449520349,
                                     latitudeDelta: 0.015,
                                     longitudeDelta: 0.015,
                                 }}>
                                 <Marker
                                     image={require('@assets/images/mark.png')}
                                     coordinate={{
-                                        latitude: lat,
-                                        longitude: long,
+                                        latitude: 16.246040662984942,
+                                    longitude: 103.24808449520349,
                                     }}
                                     // title="อยู่ดี มีสุข"
                                 />
-                                {orders.map((item, i) => (
+                                {/* {orders.map((item, i) => (
                                     <Marker
                                         key={i}
                                         image={require('@assets/images/home.png')}
@@ -356,126 +382,20 @@ export default function TrakingScreen(props) {
                                         }}
                                         title={item.name}
                                     />
-                                ))}
-                                <Polyline
+                                ))} */}
+                                {/* <Polyline
                                     coordinates={isPolyline}
                                     strokeColor="red"
                                     strokeWidth={5}
                                     lineDashPattern={[5, 0]}
-                                />
+                                /> */}
                             </MapView>
                         </View>
                     )}
 
                     <View style={{ flex: 1 }}>
                         <ScrollView>
-                            {orders.length != 0 ? (
-                                <View
-                                    style={{
-                                        marginTop: 10,
-                                        paddingHorizontal: 10,
-                                    }}>
-                                    {orders.map((item, i) => (
-                                        <TouchableHighlight
-                                            key={i}
-                                            underlayColor="null"
-                                            onPress={() =>
-                                                props.navigation.navigate(
-                                                    'ScanQRScreen',
-                                                    { traking: i },
-                                                )
-                                            }>
-                                            <View style={styles.box}>
-                                                <View
-                                                    style={{
-                                                        alignItems: 'center',
-                                                    }}>
-                                                    <Text style={styles.font}>
-                                                        เริ่ม / ถึง / จริง
-                                                    </Text>
-                                                    <Text style={styles.font}>
-                                                        12:30 / 13:00 / 12:58
-                                                    </Text>
-                                                </View>
-                                                <View style={styles.row}>
-                                                    <View
-                                                        style={
-                                                            styles.flexStart
-                                                        }>
-                                                        <Text
-                                                            style={styles.font}>
-                                                            ชื่อ
-                                                        </Text>
-                                                        <Text
-                                                            style={styles.font}>
-                                                            เบอร์
-                                                        </Text>
-                                                        <Text
-                                                            style={styles.font}>
-                                                            สถานะ
-                                                        </Text>
-                                                        <Text
-                                                            style={styles.font}>
-                                                            ระยะทาง
-                                                        </Text>
-                                                        <Text
-                                                            style={styles.font}>
-                                                            เวลา
-                                                        </Text>
-                                                        <Text
-                                                            style={styles.font}>
-                                                            ที่อยู่
-                                                        </Text>
-                                                    </View>
-                                                    <View
-                                                        style={styles.flexEnd}>
-                                                        <Text
-                                                            style={styles.font}>
-                                                            {item.name}
-                                                        </Text>
-                                                        <Text
-                                                            style={styles.font}>
-                                                            {item.phoneNumber}
-                                                        </Text>
-                                                        <Text
-                                                            style={styles.font}>
-                                                            {item.statusName}
-                                                        </Text>
-                                                        <Text
-                                                            style={styles.font}>
-                                                            10 กิโลเมตร
-                                                        </Text>
-                                                        <Text
-                                                            style={styles.font}>
-                                                            0 ชั่วโมง 20 นาที
-                                                        </Text>
-                                                        <Text
-                                                            style={styles.font}>
-                                                            {item.address}
-                                                        </Text>
-                                                    </View>
-                                                </View>
-                                            </View>
-                                        </TouchableHighlight>
-                                    ))}
-                                </View>
-                            ) : (
-                                <View
-                                    style={{
-                                        flex: 1,
-                                        alignItems: 'center',
-                                    }}>
-                                    <Text style={styles.font}>
-                                        ไม่มีรายการที่ต้องส่ง
-                                    </Text>
-                                    {/* <Button
-                                        title="onClick"
-                                        onPress={startBGLocation}></Button>
-                                    <Button
-                                        title="onClick2"
-                                        onPress={ismoving}></Button> */}
-                                </View>
-                            )}
+                            
                         </ScrollView>
                     </View>
                 </>
