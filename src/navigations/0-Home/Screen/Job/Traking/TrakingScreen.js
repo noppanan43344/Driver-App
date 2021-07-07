@@ -29,23 +29,23 @@ export default function TrakingScreen(props) {
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
     const onLocation = (location) => {
-        // console.log('[location] -', location);
+        console.log('[location] -', location);
         setLat(location['coords']['latitude']);
         setLong(location['coords']['longitude']);
         var timezone = moment().format();
         setTime(timezone);
     };
     const onError = (error) => {
-        // console.warn('[location] ERROR -', error);
+        console.warn('[location] ERROR -', error);
     };
     const onActivityChange = (event) => {
-        // console.log('[activitychange] -', event); // eg: 'on_foot', 'still', 'in_vehicle'
+        console.log('[activitychange] -', event); // eg: 'on_foot', 'still', 'in_vehicle'
     };
     const onProviderChange = (provider) => {
-        // console.log('[providerchange] -', provider.enabled, provider.status);
+        console.log('[providerchange] -', provider.enabled, provider.status);
     };
     const onMotionChange = (event) => {
-        // console.log('[motionchange] -', event.isMoving, event.location);
+        console.log('[motionchange] -', event.isMoving, event.location);
         // setLoading(false);
     };
 
@@ -101,7 +101,7 @@ export default function TrakingScreen(props) {
     };
     const isPoly = async () => {
         const { data } = await Axios.get(
-            'http://192.168.1.33:8080/ltl-scen1-dev/provider/findordermoc'
+            'http://192.168.1.73:8080/ltl-scen1-dev/provider/findordermoc',
         );
         var _waypoint = [];
         var marker = [];
@@ -290,7 +290,7 @@ export default function TrakingScreen(props) {
                             </View>
                         </ScrollView>
                     </View>
-                    {!isEnabled ? (
+                    {isEnabled == false ? (
                         <View style={styles.container}>
                             <MapView
                                 style={styles.map}
@@ -299,8 +299,7 @@ export default function TrakingScreen(props) {
                                     longitude: long,
                                     latitudeDelta: 0.015,
                                     longitudeDelta: 0.015,
-                                }}
-                            >
+                                }}>
                                 <Marker
                                     image={require('@assets/images/mark.png')}
                                     coordinate={{
@@ -325,7 +324,7 @@ export default function TrakingScreen(props) {
                                     geodesic={false}
                                     strokeColor="blue"
                                     strokeWidth={5}
-                                    lineDashPattern={null}
+                                    lineDashPattern={[5, 7]}
                                 />
                             </MapView>
                         </View>
@@ -362,6 +361,7 @@ export default function TrakingScreen(props) {
                                     coordinates={isPolyline}
                                     strokeColor="red"
                                     strokeWidth={5}
+                                    lineDashPattern={[5, 0]}
                                 />
                             </MapView>
                         </View>
