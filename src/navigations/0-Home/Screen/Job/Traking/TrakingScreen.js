@@ -9,14 +9,12 @@ import {
     Switch,
 } from 'react-native';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
-// import Header from '@components/Header';
 import BackButton from '@components/Button/BackButton';
 import MapView, { Polyline, Marker } from 'react-native-maps';
 import Loading from '@components/Loading/Loading';
 import Axios from 'axios';
 import { URL } from '@utils/config';
 import BackgroundGeolocation from 'react-native-background-geolocation';
-import moment from 'moment';
 import { Header } from 'react-native-elements';
 export default function TrakingScreen(props) {
     const [loading, setLoading] = useState(true);
@@ -25,7 +23,6 @@ export default function TrakingScreen(props) {
     const [isWayPoint, setIsWayPoint] = useState([]);
     const [lat, setLat] = useState(0);
     const [long, setLong] = useState(0);
-    const [time, setTime] = useState();
     const [isColor, setIsColor] = useState([]);
     const [location, setLocation] = useState({});
     const [isEnabled, setIsEnabled] = useState(false);
@@ -34,10 +31,6 @@ export default function TrakingScreen(props) {
         // console.log('[location] -', location);
         setLat(location['coords']['latitude']);
         setLong(location['coords']['longitude']);
-        var timezone = moment().format();
-        // console.log('timezone' + timezone);
-        // console.log('time' + time);
-        setTime(timezone);
     };
     const onError = (error) => {
         // console.warn('[location] ERROR -', error);
@@ -56,14 +49,14 @@ export default function TrakingScreen(props) {
     useEffect(() => {
         const unsub = props.navigation.addListener('focus', () => {
             console.log('useEffect');
+
             bgGeoLocation();
         });
         return unsub;
     }, [props.navigation]);
 
     const bgGeoLocation = async () => {
-        getlocation();
-
+        let isJobId = await getlocation();
         BackgroundGeolocation.onLocation(onLocation, onError);
         BackgroundGeolocation.onMotionChange(onMotionChange);
         BackgroundGeolocation.onActivityChange(onActivityChange);
@@ -72,14 +65,15 @@ export default function TrakingScreen(props) {
         BackgroundGeolocation.ready(
             {
                 desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-                distanceFilter: 0,
-                stopTimeout: 5,
+                distanceFilter: 5,
+                stopTimeout: 1,
                 debug: false, // <-- enable this hear sounds for background-geolocation life-cycle.
                 logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
                 stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
                 startOnBoot: true, // <-- Auto start tracking when device is powered-up.
                 // HTTP / SQLite config
-                url: URL + 'driver/post-location',
+                url:
+                    'http://192.168.1.45:8080/ltl-scen1-dev/driver/post-location',
                 method: 'POST',
                 batchSync: false, // <-- [Default: false] Set true to sync locations to server in a single HTTP request.
                 autoSync: true, // <-- [Default: true] Set true to sync each location to server as it arrives.
@@ -87,8 +81,7 @@ export default function TrakingScreen(props) {
                     'X-FOO': 'bar',
                 },
                 params: {
-                    time: moment().format(),
-                    job_id: 1,
+                    job_id: isJobId,
                 },
             },
             (state) => {
@@ -106,12 +99,13 @@ export default function TrakingScreen(props) {
     };
     const getlocation = async () => {
         const { data } = await Axios.get(
-            'http://192.168.1.73:8080/ltl-scen1-dev/provider/findordermoc',
+            'http://192.168.1.45:8080/ltl-scen1-dev/provider/findordermoc/112',
         );
         let waypoints = [];
         var polylines = [];
         var marker = [];
         data.result.order.map((val, i) => {
+            // add data custommer
             marker.push({
                 latitude: val.lat,
                 longitude: val.lng,
@@ -126,6 +120,7 @@ export default function TrakingScreen(props) {
                     ' ' +
                     val.province,
             });
+            // add data waypoints
             let waypoint = [];
             val.location.map((val, i) => {
                 waypoint.push({
@@ -134,12 +129,13 @@ export default function TrakingScreen(props) {
                 });
             });
             waypoints.push(waypoint);
-
+            // add data polylines
             polylines.push({
                 latitude: val.lat,
                 longitude: val.lng,
             });
         });
+        // add data polylines index 0
         polylines.push({
             latitude: data.result.order[0].lat,
             longitude: data.result.order[0].lng,
@@ -159,6 +155,9 @@ export default function TrakingScreen(props) {
         setLocation(data);
         setOrders(marker);
         setLoading(false);
+        console.log(waypoints);
+        console.log(polylines);
+        return data.result.order[0].orderId; // <- ID order index 0
     };
 
     return (
@@ -327,10 +326,13 @@ export default function TrakingScreen(props) {
                                 <Marker
                                     image={require('@assets/images/mark.png')}
                                     coordinate={{
-                                        latitude: lat,
-                                        longitude: long,
+                                        latitude: 16.2533,
+                                        longitude: 103.23738,
+                                        // latitude: lat,
+                                        // longitude: long,
                                     }}
                                 />
+
                                 {location.result.order.map((val, i) => (
                                     <>
                                         <Polyline
@@ -340,7 +342,7 @@ export default function TrakingScreen(props) {
                                             lineDashPattern={[5, 7]}
                                         />
                                         <Marker
-                                            key={i}
+                                            key={val.orderId}
                                             image={require('@assets/images/home.png')}
                                             coordinate={{
                                                 latitude: val.lat,
@@ -354,6 +356,32 @@ export default function TrakingScreen(props) {
                                         />
                                     </>
                                 ))}
+                                <Polyline
+                                    coordinates={[
+                                        {
+                                            latitude: 16.2533,
+                                            longitude: 103.23738,
+                                        },
+                                        {
+                                            latitude: 16.254732,
+                                            longitude: 103.237347,
+                                        },
+                                        {
+                                            latitude: 16.254703,
+                                            longitude: 103.235152,
+                                        },
+                                        {
+                                            latitude: 16.254832,
+                                            longitude: 103.235152,
+                                        },
+                                        // {
+                                        //     latitude: lat,
+                                        //     longitude: long,
+                                        // },
+                                    ]}
+                                    strokeColor="green" // fallback for when `strokeColors` is not supported by the map-provider
+                                    strokeWidth={5}
+                                />
                             </MapView>
                         ) : (
                             <MapView
@@ -371,11 +399,7 @@ export default function TrakingScreen(props) {
                                         longitude: long,
                                     }}
                                 />
-                                <Polyline
-                                    coordinates={isPolyline}
-                                    strokeColor="red"
-                                    strokeWidth={5}
-                                />
+
                                 {location.result.order.map((val, i) => (
                                     <>
                                         <Marker
@@ -390,6 +414,11 @@ export default function TrakingScreen(props) {
                                                 ' ' +
                                                 val.lastname
                                             }
+                                        />
+                                        <Polyline
+                                            coordinates={isPolyline}
+                                            strokeColor={isColor[i]}
+                                            strokeWidth={5}
                                         />
                                     </>
                                 ))}
