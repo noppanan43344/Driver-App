@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Job from './JobScreen';
-import SingUp from './Traking/ScanQR/SingUp/SingUpScreen';
-import ScanQR from './Traking/ScanQR/ScanQRScreen';
-import Traking from './Traking/TrakingScreen';
+import SingUp from './Tracking/ScanQR/SingUp/SingUpScreen';
+import ScanQR from './Tracking/ScanQR/ScanQRScreen';
+import Tracking from './Tracking/TrackingScreen';
 
 const Stack = createStackNavigator();
 
@@ -17,8 +17,8 @@ export default JobStack = () => {
                     headerShown: false,
                 }}></Stack.Screen> */}
             <Stack.Screen
-                name="TrakingScreen"
-                component={Traking}
+                name="TrackingScreen"
+                component={Tracking}
                 options={{ headerShown: false }}></Stack.Screen>
             <Stack.Screen
                 name="ScanQRScreen"

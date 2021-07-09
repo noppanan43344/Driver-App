@@ -27,7 +27,7 @@ export default function JobScreen(props) {
                             key={i}
                             underlayColor="null"
                             onPress={() =>
-                                props.navigation.navigate('TrakingScreen')
+                                props.navigation.navigate('TrackingScreen')
                             }>
                             <View style={styles.box}>
                                 <View style={styles.row}>

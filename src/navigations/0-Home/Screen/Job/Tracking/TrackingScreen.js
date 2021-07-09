@@ -20,6 +20,7 @@ export default function TrakingScreen(props) {
     const [loading, setLoading] = useState(true);
     const [orders, setOrders] = useState({});
     const [isPolyline, setIsPolyline] = useState({});
+    const [isNewPolyline, setIsNewPolyline] = useState([]);
     const [isWayPoint, setIsWayPoint] = useState([]);
     const [lat, setLat] = useState(0);
     const [long, setLong] = useState(0);
@@ -47,14 +48,42 @@ export default function TrakingScreen(props) {
     };
 
     useEffect(() => {
+        let timer;
         const unsub = props.navigation.addListener('focus', () => {
             console.log('useEffect');
-
             bgGeoLocation();
+            timer = setInterval(() => {
+                getPolylines();
+            }, 5000);
         });
-        return unsub;
+
+        return () => {
+            clearInterval(timer);
+            unsub;
+        };
     }, [props.navigation]);
 
+    const getPolylines = async () => {
+        const { data } = await Axios.get(URL + 'tracking/tracking');
+        let waypoints = [];
+        var polylines = [];
+
+        data.result.dashline.map((val, i) => {
+            waypoints.push({
+                latitude: val[1],
+                longitude: val[0],
+            });
+        });
+        data.result.polyline.map((val, i) => {
+            polylines.push({
+                latitude: val[1],
+                longitude: val[0],
+            });
+        });
+        setIsNewPolyline(polylines);
+        console.log(waypoints);
+        console.log(polylines);
+    };
     const bgGeoLocation = async () => {
         let isJobId = await getlocation();
         BackgroundGeolocation.onLocation(onLocation, onError);
@@ -65,15 +94,14 @@ export default function TrakingScreen(props) {
         BackgroundGeolocation.ready(
             {
                 desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-                distanceFilter: 5,
-                stopTimeout: 1,
+                distanceFilter: 10,
+                stopTimeout: 3,
                 debug: false, // <-- enable this hear sounds for background-geolocation life-cycle.
                 logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
                 stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
                 startOnBoot: true, // <-- Auto start tracking when device is powered-up.
                 // HTTP / SQLite config
-                url:
-                    'http://192.168.1.45:8080/ltl-scen1-dev/driver/post-location',
+                url: URL + 'driver/post-location',
                 method: 'POST',
                 batchSync: false, // <-- [Default: false] Set true to sync locations to server in a single HTTP request.
                 autoSync: true, // <-- [Default: true] Set true to sync each location to server as it arrives.
@@ -98,9 +126,7 @@ export default function TrakingScreen(props) {
         );
     };
     const getlocation = async () => {
-        const { data } = await Axios.get(
-            'http://192.168.1.45:8080/ltl-scen1-dev/provider/findordermoc/112',
-        );
+        const { data } = await Axios.get(URL + 'provider/findordermoc/112');
         let waypoints = [];
         var polylines = [];
         var marker = [];
@@ -155,8 +181,6 @@ export default function TrakingScreen(props) {
         setLocation(data);
         setOrders(marker);
         setLoading(false);
-        console.log(waypoints);
-        console.log(polylines);
         return data.result.order[0].orderId; // <- ID order index 0
     };
 
@@ -320,14 +344,14 @@ export default function TrakingScreen(props) {
                                 region={{
                                     latitude: lat,
                                     longitude: long,
-                                    latitudeDelta: 0.01,
-                                    longitudeDelta: 0.01,
+                                    latitudeDelta: 0.001,
+                                    longitudeDelta: 0.001,
                                 }}>
                                 <Marker
                                     image={require('@assets/images/mark.png')}
                                     coordinate={{
-                                        latitude: 16.2533,
-                                        longitude: 103.23738,
+                                        latitude: lat,
+                                        longitude: long,
                                         // latitude: lat,
                                         // longitude: long,
                                     }}
@@ -357,28 +381,7 @@ export default function TrakingScreen(props) {
                                     </>
                                 ))}
                                 <Polyline
-                                    coordinates={[
-                                        {
-                                            latitude: 16.2533,
-                                            longitude: 103.23738,
-                                        },
-                                        {
-                                            latitude: 16.254732,
-                                            longitude: 103.237347,
-                                        },
-                                        {
-                                            latitude: 16.254703,
-                                            longitude: 103.235152,
-                                        },
-                                        {
-                                            latitude: 16.254832,
-                                            longitude: 103.235152,
-                                        },
-                                        // {
-                                        //     latitude: lat,
-                                        //     longitude: long,
-                                        // },
-                                    ]}
+                                    coordinates={isNewPolyline}
                                     strokeColor="green" // fallback for when `strokeColors` is not supported by the map-provider
                                     strokeWidth={5}
                                 />
