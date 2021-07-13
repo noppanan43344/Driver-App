@@ -48,22 +48,16 @@ export default function TrakingScreen(props) {
     };
 
     useEffect(() => {
-        
-        let JobSessionId = 112;
+        // open job here
+        openSession()
         let timer;
-        
-
         const unsub = props.navigation.addListener('focus', () => {
             console.log('useEffect');
-            const getlocation = getLocation(JobSessionId);
-            openSession(JobSessionId);
-             Promise.all([getlocation]).then((values) => {
-            console.log('===', values[0]);
-            bgGeoLocation(values[0]);
+
+            bgGeoLocation();
             timer = setInterval(() => {
-                getPolylines(values[0]);
+                getPolylines();
             }, 5000);
-            });
         });
 
         return () => {
@@ -72,24 +66,80 @@ export default function TrakingScreen(props) {
         };
     }, [props.navigation]);
 
-    // const onwork = async()=>{
-    //     await openSession(112)
-    //     let orderRouteId = await getlocation(112)
-    //     await bgGeoLocation(orderRouteId)
-    //     await getPolylines(orderRouteId)
-    // }
-    const getLocation = async (JobSessionId) => {
-        console.log("[getLocation]"+URL + 'provider/findordermoc/'+JobSessionId);
-        const { data } = await Axios.get(URL + 'provider/findordermoc/'+JobSessionId);
+    const openSession= async()=>{
+        const { data } = await Axios.get(URL + '/startwork/112');
+    }
+
+    const getPolylines = async () => {
+        const { data } = await Axios.get(URL + 'tracking/tracking/333');
+        let waypoints = [];
+        var polylines = [];
+
+        data.result.dashline.map((val, i) => {
+            waypoints.push({
+                latitude: val[1],
+                longitude: val[0],
+            });
+        });
+        data.result.polyline.map((val, i) => {
+            polylines.push({
+                latitude: val[1],
+                longitude: val[0],
+            });
+        });
+        setIsNewPolyline(polylines);
+        console.log(waypoints);
+        console.log(polylines);
+    };
+    const bgGeoLocation = async () => {
+        let isJobId = await getlocation();
+        BackgroundGeolocation.onLocation(onLocation, onError);
+        BackgroundGeolocation.onMotionChange(onMotionChange);
+        BackgroundGeolocation.onActivityChange(onActivityChange);
+        BackgroundGeolocation.onProviderChange(onProviderChange);
+        BackgroundGeolocation.changePace(true);
+        BackgroundGeolocation.ready(
+            {
+                desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
+                distanceFilter: 10,
+                stopTimeout: 3,
+                debug: false, // <-- enable this hear sounds for background-geolocation life-cycle.
+                logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
+                stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
+                startOnBoot: true, // <-- Auto start tracking when device is powered-up.
+                // HTTP / SQLite config
+                url: URL + 'driver/post-location',
+                method: 'POST',
+                batchSync: false, // <-- [Default: false] Set true to sync locations to server in a single HTTP request.
+                autoSync: true, // <-- [Default: true] Set true to sync each location to server as it arrives.
+                headers: {
+                    'X-FOO': 'bar',
+                },
+                params: {
+                    job_id: isJobId,
+                },
+            },
+            (state) => {
+                console.log(
+                    '- BackgroundGeolocation is configured and ready: ',
+                    state.enabled,
+                );
+                if (!state.enabled) {
+                    BackgroundGeolocation.start(function () {
+                        console.log('- Start success');
+                    });
+                }
+            },
+        );
+    };
+    const getlocation = async () => {
+        const { data } = await Axios.get(URL + 'provider/findordermoc/112');
         let waypoints = [];
         var polylines = [];
         var marker = [];
         data.result.order.map((val, i) => {
             // add data custommer
             marker.push({
-                status:val.status,
-                orderNumber:val.orderNumber,
-                orderid:val.orderId,
                 latitude: val.lat,
                 longitude: val.lng,
                 name: val.firstname + ' ' + val.lastname,
@@ -139,76 +189,7 @@ export default function TrakingScreen(props) {
         setOrders(marker);
         setLoading(false);
         return data.result.order[0].orderId; // <- return ID order_route index 0
-    }
-    const openSession= async(JobSessionId)=>{
-        console.log("[openSession]" +URL + 'driver/startwork/'+JobSessionId);
-        const { data } = await Axios.get(URL + 'driver/startwork/'+JobSessionId);
-
-    }
-
-    const getPolylines = async (orderRouteId) => {
-        console.log("[getPolylines]"+URL + 'tracking/tracking/'+orderRouteId);
-        const { data } = await Axios.get(URL + 'tracking/tracking/'+orderRouteId);
-        let waypoints = [];
-        var polylines = [];
-
-        data.result.dashline.map((val, i) => {
-            waypoints.push({
-                latitude: val[1],
-                longitude: val[0],
-            });
-        });
-        data.result.polyline.map((val, i) => {
-            polylines.push({
-                latitude: val[1],
-                longitude: val[0],
-            });
-        });
-        setIsNewPolyline(polylines);
-        console.log(waypoints);
-        console.log(polylines);
     };
-    const bgGeoLocation = async (orderRouteId) => {
-        BackgroundGeolocation.onLocation(onLocation, onError);
-        BackgroundGeolocation.onMotionChange(onMotionChange);
-        BackgroundGeolocation.onActivityChange(onActivityChange);
-        BackgroundGeolocation.onProviderChange(onProviderChange);
-        BackgroundGeolocation.changePace(true);
-        BackgroundGeolocation.ready(
-            {
-                desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-                distanceFilter: 10,
-                stopTimeout: 3,
-                debug: false, // <-- enable this hear sounds for background-geolocation life-cycle.
-                logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
-                stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
-                startOnBoot: true, // <-- Auto start tracking when device is powered-up.
-                // HTTP / SQLite config
-                url: URL + 'driver/post-location',
-                method: 'POST',
-                batchSync: false, // <-- [Default: false] Set true to sync locations to server in a single HTTP request.
-                autoSync: true, // <-- [Default: true] Set true to sync each location to server as it arrives.
-                headers: {
-                    'X-FOO': 'bar',
-                },
-                params: {
-                    job_id: orderRouteId,
-                },
-            },
-            (state) => {
-                console.log(
-                    '- BackgroundGeolocation is configured and ready: ',
-                    state.enabled,
-                );
-                if (!state.enabled) {
-                    BackgroundGeolocation.start(function () {
-                        console.log('- Start success');
-                    });
-                }
-            },
-        );
-    };
-
 
     return (
         <>
@@ -386,14 +367,13 @@ export default function TrakingScreen(props) {
                                 {location.result.order.map((val, i) => (
                                     <>
                                         <Polyline
-                                        key={"A"+i}
                                             coordinates={isWayPoint[i]}
                                             strokeColor={isColor[i]}
                                             strokeWidth={5}
                                             lineDashPattern={[5, 7]}
                                         />
                                         <Marker
-                                            key={"B"+i}
+                                            key={val.orderId}
                                             image={require('@assets/images/home.png')}
                                             coordinate={{
                                                 latitude: val.lat,
@@ -433,7 +413,7 @@ export default function TrakingScreen(props) {
                                 {location.result.order.map((val, i) => (
                                     <>
                                         <Marker
-                                            key={"C"+i}
+                                            key={i}
                                             image={require('@assets/images/home.png')}
                                             coordinate={{
                                                 latitude: val.lat,
@@ -446,7 +426,6 @@ export default function TrakingScreen(props) {
                                             }
                                         />
                                         <Polyline
-                                            key={"D"+i}
                                             coordinates={isPolyline}
                                             strokeColor={isColor[i]}
                                             strokeWidth={5}
@@ -466,18 +445,15 @@ export default function TrakingScreen(props) {
                                     }}>
                                     {orders.map((item, i) => (
                                         <TouchableHighlight
-                                            key={"E"+i}
+                                            key={i}
                                             underlayColor="null"
                                             onPress={() =>
                                                 props.navigation.navigate(
                                                     'ScanQRScreen',
-                                                    { 
-                                                        orderNumber:item.orderNumber,
-                                                        orderid:item.orderid, 
-                                                },
+                                                    { traking: i },
                                                 )
                                             }>
-                                            <View style={[styles.box,{backgroundColor:item.status =='ยังไม่ส่ง' ?'#FCF3CF':'#D5F5E3'}]}>
+                                            <View style={styles.box}>
                                                 <View
                                                     style={{
                                                         alignItems: 'center',
@@ -588,6 +564,7 @@ const styles = StyleSheet.create({
         height: Dimensions.get('window').height * 0.5,
     },
     box: {
+        backgroundColor: '#FFF',
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',

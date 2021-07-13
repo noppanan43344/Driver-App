@@ -4,21 +4,40 @@ import React from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
+import Axios from 'axios';
+import { URL } from '@utils/config';
 export default function ScanQRScreen(props) {
     // var track = 'ABCD-123-00-TH1';
-    let { traking } = props.route.params;
-    createTwoButtonAlert = () =>
+    let { orderNumber, orderid } = props.route.params;
+    const errorAlert = () =>{
         Alert.alert(
             'เกิดข้อผิดพลาด',
-            'QR Code ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง',
+            'QR Code ไม่ถูกต้อง',
             [{ text: 'OK', onPress: () => props.navigation.goBack() }],
         );
+    }
+    const updateStatusOrder = async(qrId) =>{
+        const { data } = await Axios.post(URL + 'driver/comfirm',{orderId:orderid,orderNumber:qrId});
+        console.log(data);
+    }
+    const successAlert = () =>{   
+        Alert.alert(
+            'สำเร็จ',
+            'รหัสสินค้าถูกต้อง',
+            [{text: 'OK'}],
+              {cancelable: false},
+        );
+    }
     const onSuccess = (e) => {
+        console.log("orderid"+orderid+"orderNumber"+orderNumber);
         console.log(e.data);
-        if (traking == e.data) {
-            props.navigation.navigate('SingUpScreen');
+        if (orderNumber == e.data) {
+            successAlert()
+            updateStatusOrder(e.data)
+            props.navigation.goBack()
+            // props.navigation.navigate('SingUpScreen');
         } else {
-            createTwoButtonAlert();
+            errorAlert();
             console.log('error');
         }
     };
@@ -30,11 +49,12 @@ export default function ScanQRScreen(props) {
                     <BackButton onPress={() => props.navigation.goBack()} />
                 }
             />
+            <Text>orderNumber {orderNumber+"orderid"+orderid}</Text>
             <QRCodeScanner
                 onRead={onSuccess}
                 flashMode={RNCamera.Constants.FlashMode.off}
             />
-            <Text>{traking}</Text>
+            
         </>
     );
 }
