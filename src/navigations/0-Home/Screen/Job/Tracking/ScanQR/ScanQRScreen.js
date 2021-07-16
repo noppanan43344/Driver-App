@@ -34,8 +34,8 @@ export default function ScanQRScreen(props) {
         if (orderNumber == e.data) {
             successAlert()
             updateStatusOrder(e.data)
-            props.navigation.goBack()
-            // props.navigation.navigate('SingUpScreen');
+            //props.navigation.goBack()
+            props.navigation.navigate('SingUpScreen');
         } else {
             errorAlert();
             console.log('error');

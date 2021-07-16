@@ -7,6 +7,7 @@ import {
     ScrollView,
     TouchableHighlight,
     ActivityIndicator,
+    Alert
 } from 'react-native';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
 import { Header } from 'react-native-elements';
@@ -26,6 +27,7 @@ export default function index(props) {
         const { data } = await Axios.get(
             URL + 'driver/findJob/' + driverId + '/' + date,
         );
+        console.log(data);
         setJob(data);
         setisLoad(false);
     };
@@ -40,6 +42,21 @@ export default function index(props) {
             today.getDate();
         return date;
     };
+    const goTracking = ()=>{
+        props.navigation.navigate(
+            'JobScreen',
+            { 
+                jobsessionId:job.result.vehicleJobSessionId > 0 ? job.result.vehicleJobSessionId : 0
+        },
+        )
+    }
+    const AlertJob = ()=>{
+        Alert.alert(
+            'แจ้งเตือน',
+            'คุณไม่มีงานในวันนี้ !',
+            [{ text: 'OK'}],
+        );
+    }
     return (
         <View style={styles.container}>
             <Header
@@ -87,7 +104,7 @@ export default function index(props) {
                                 marginTop: -20,
                                 marginBottom:20
                             }}>
-                            งาน{"รหัส:"+job.result.vehicleJobSessionId+" ของวันที่:"+job.result.dateRoute +" รถ:"+job.result.vehicleId.name}
+                            งาน: {job.result.dateRoute ? "รหัส:"+job.result.vehicleJobSessionId+" ของวันที่:"+job.result.dateRoute +" รถ:"+job.result.vehicleId.name:"ไม่มีงานของคุณในวันนี้"}
                         </Text>
                         </View>
                     </View>
@@ -107,10 +124,7 @@ export default function index(props) {
                                             }}>
                                             <TouchableHighlight
                                                 underlayColor="null"
-                                                onPress={() =>
-                                                    props.navigation.navigate(
-                                                        'JobScreen',{jobsessionId:job.result.vehicleJobSessionId}
-                                                    )
+                                                onPress={job.result.vehicleJobSessionId > 0 ? ()=>goTracking() : ()=>AlertJob()
                                                 }>
                                                 <View style={styles.box}>
                                                     <Image
@@ -166,6 +180,7 @@ export default function index(props) {
                                                 </View>
                                             </TouchableHighlight>
                                             <TouchableHighlight
+
                                                 underlayColor="null"
                                                 onPress={() =>
                                                     props.navigation.navigate(

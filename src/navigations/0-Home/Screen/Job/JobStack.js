@@ -7,7 +7,7 @@ import Tracking from './Tracking/TrackingScreen';
 
 const Stack = createStackNavigator();
 
-export default JobStack = () => {
+export default JobStack = (props) => {
     return (
         <Stack.Navigator>
             {/* <Stack.Screen
@@ -19,7 +19,9 @@ export default JobStack = () => {
             <Stack.Screen
                 name="TrackingScreen"
                 component={Tracking}
-                options={{ headerShown: false }}></Stack.Screen>
+                options={{ headerShown: false }}
+                initialParams={{jobsessionId: props.route.params.jobsessionId}}
+            ></Stack.Screen>
             <Stack.Screen
                 name="ScanQRScreen"
                 component={ScanQR}

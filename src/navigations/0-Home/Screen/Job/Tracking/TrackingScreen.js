@@ -17,6 +17,8 @@ import { URL } from '@utils/config';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import { Header } from 'react-native-elements';
 export default function TrakingScreen(props) {
+    let { jobsessionId } = props.route.params;
+
     const [loading, setLoading] = useState(true);
     const [orders, setOrders] = useState({});
     const [isPolyline, setIsPolyline] = useState({});
@@ -27,6 +29,7 @@ export default function TrakingScreen(props) {
     const [isColor, setIsColor] = useState([]);
     const [location, setLocation] = useState({});
     const [isEnabled, setIsEnabled] = useState(false);
+    const [timer, setTimer] = useState();
     const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
     const onLocation = (location) => {
         // console.log('[location] -', location);
@@ -51,25 +54,25 @@ export default function TrakingScreen(props) {
         
         let JobSessionId = 112;
         let timer;
-        
-
         const unsub = props.navigation.addListener('focus', () => {
             console.log('useEffect');
-            const getlocation = getLocation(JobSessionId);
-            openSession(JobSessionId);
+            const getlocation = getLocation(jobsessionId);
+            openSession(jobsessionId);
              Promise.all([getlocation]).then((values) => {
             console.log('===', values[0]);
             bgGeoLocation(values[0]);
             timer = setInterval(() => {
                 getPolylines(values[0]);
             }, 5000);
+            setTimer(timer)
             });
-        });
 
+        });
         return () => {
             clearInterval(timer);
-            unsub;
+            unsub
         };
+        
     }, [props.navigation]);
 
     // const onwork = async()=>{
@@ -92,8 +95,8 @@ export default function TrakingScreen(props) {
                 orderid:val.orderId,
                 latitude: val.lat,
                 longitude: val.lng,
-                name: val.firstname + ' ' + val.lastname,
-                phoneNumber: val.phoneNumber,
+                name: val.recipientFirstname + ' ' + val.recipientLastname,
+                phoneNumber: val.recipientPhoneNumber,
                 address:
                     val.address +
                     ' ' +
@@ -165,8 +168,8 @@ export default function TrakingScreen(props) {
             });
         });
         setIsNewPolyline(polylines);
-        console.log(waypoints);
-        console.log(polylines);
+        // console.log(waypoints);r
+        // console.log(polylines);
     };
     const bgGeoLocation = async (orderRouteId) => {
         BackgroundGeolocation.onLocation(onLocation, onError);
@@ -217,6 +220,7 @@ export default function TrakingScreen(props) {
                 leftComponent={
                     <BackButton
                         onPress={() => {
+                            clearInterval(timer)
                             props.navigation.goBack();
                         }}
                     />
@@ -468,7 +472,8 @@ export default function TrakingScreen(props) {
                                         <TouchableHighlight
                                             key={"E"+i}
                                             underlayColor="null"
-                                            onPress={() =>
+                                            onPress={() =>{
+                                                clearInterval(timer)
                                                 props.navigation.navigate(
                                                     'ScanQRScreen',
                                                     { 
@@ -476,6 +481,8 @@ export default function TrakingScreen(props) {
                                                         orderid:item.orderid, 
                                                 },
                                                 )
+                                            }
+                                                
                                             }>
                                             <View style={[styles.box,{backgroundColor:item.status =='ยังไม่ส่ง' ?'#FCF3CF':'#D5F5E3'}]}>
                                                 <View
