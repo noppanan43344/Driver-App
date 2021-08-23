@@ -9,14 +9,16 @@ import {
     ActivityIndicator,
     Alert
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
 import { Header } from 'react-native-elements';
 import Axios from 'axios';
 import { URL } from '@utils/config';
 import Loading from '@components/Loading/Loading';
+import loginService from '../../services/loginService';
 
 export default function index(props) {
-    const [driverId, setDriverId] = useState(1);
+    const [driverId, setDriverId] = useState(0);
     const [job, setJob] = useState({});
     const [isLoad, setisLoad] = useState(true);
     useEffect(() => {
@@ -24,8 +26,11 @@ export default function index(props) {
     }, []);
 
     const getjob = async (date) => {
+        const value = await loginService.getusername();
+        setDriverId(value !== null ? value:0)
+        console.log("DriverId: "+value);
         const { data } = await Axios.get(
-            URL + 'driver/findJob/' + driverId + '/' + date,
+            URL + 'driver/findJob/' + value + '/' + date,
         );
         console.log(data);
         setJob(data);
@@ -96,6 +101,7 @@ export default function index(props) {
                             </Text>
                         </View>
                         <View style={{ flexDirection: 'row-reverse' }}>
+
                         <Text
                             style={{
                                 fontFamily: FONT_BOLD,
@@ -104,7 +110,7 @@ export default function index(props) {
                                 marginTop: -20,
                                 marginBottom:20
                             }}>
-                            งาน: {job.result.dateRoute ? "รหัส:"+job.result.vehicleJobSessionId+" ของวันที่:"+job.result.dateRoute +" รถ:"+job.result.vehicleId.name:"ไม่มีงานของคุณในวันนี้"}
+                            รหัสคนขับ: {driverId} งาน: {job.result.dateRoute ? "รหัส:"+job.result.vehicleJobSessionId+" ของวันที่:"+job.result.dateRoute +" รถ:"+job.result.vehicleId.name:"ไม่มีงานของคุณในวันนี้"}
                         </Text>
                         </View>
                     </View>

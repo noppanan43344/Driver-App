@@ -6,6 +6,7 @@ import {
     ScrollView,
     Image,
     Text,
+    Alert
 } from 'react-native';
 import { FONT_BOLD, FONT_SIZES, COLORS, FONT_MED } from '@components/styles';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
@@ -14,8 +15,29 @@ import BackButton from '@components/Button/BackButton';
 import { PrimaryButton } from '@components/Button';
 
 export default function SingUpScreen(props) {
+    let { status } = props.route.params; 
+    console.log(status);
     const [response, setResponse] = useState(null);
 
+    const togo = ()=>{
+        console.log("Togo");
+        switch(status) {
+ 
+            case 'no-order':
+                //Alert.alert("NOOO");
+                //props.navigation.navigate('HomeDrawer')
+                props.navigation.pop(4)
+              break;
+            
+            case 'success':
+                () => props.navigation.pop(2)
+              break;
+
+            default:
+              Alert.alert("NUMBER NOT FOUND");
+          
+            }
+    }
     return (
         <>
             <Header
@@ -82,7 +104,7 @@ export default function SingUpScreen(props) {
                         }}
                         title={'บันทึกข้อมูล'}
                         onPress={
-                            () => {}
+                            () => togo()
                             // props.navigation.navigate('SingUpScreen')
                         }
                     />

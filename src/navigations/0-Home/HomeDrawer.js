@@ -7,11 +7,11 @@ import ProfileStack from './Screen/Profile/ProfileStack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { DrawerContent } from './Screen/DrawerContent';
 const Drawer = createDrawerNavigator();
-export default HomeDrawer = () => {
+export default HomeDrawer = (props) => {
     return (
         <Drawer.Navigator
             drawerContent={(props) => <DrawerContent {...props} />}>
-            <Drawer.Screen name="HomeScreen" component={HomeStack} />
+            <Drawer.Screen name="HomeScreen" component={HomeStack}/>
             <Drawer.Screen name="JobScreen" component={JobStack} />
             <Drawer.Screen name="TopUpScreen" component={TopUpStack} />
             <Drawer.Screen

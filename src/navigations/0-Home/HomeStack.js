@@ -8,7 +8,7 @@ import ProfileStack from './Screen/Profile/ProfileStack';
 import ReportStack from './Screen/Report/ReportStack';
 const Stack = createStackNavigator();
 
-export default HomeStack = () => {
+export default HomeStack = (props) => {
     return (
         <Stack.Navigator>
             <Stack.Screen

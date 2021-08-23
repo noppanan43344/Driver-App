@@ -6,27 +6,73 @@ import {
     StatusBar,
     ScrollView,
     TextInput,
+    Alert,
 } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { PrimaryButton } from '@components/Button';
 import SpinnerDialog from '@components/Spinner/SpinnerDialog';
 import I18n from '../../../i18n/i18';
 import { FONT_BOLD, FONT_SIZES, COLORS } from '@components/styles';
+import loginService from '../../services/loginService';
+import axios from 'axios';
+import { URL } from '@utils/config';
 
 export default function AuthScreen(props) {
     const [loading, setloading] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    function login(navigation) {
+
+    const getDeviceInfo = async(driverid)=>{
+        let systemName = DeviceInfo.getSystemName();
+        let systemVersion = DeviceInfo.getSystemVersion();
+        DeviceInfo.getDeviceName().then( async(deviceName) => {
+            let payload = {
+                device:deviceName +"_" +systemName+"_"+systemVersion,
+                driverid:driverid
+        }
+        console.log(payload);
+            const {data} = await axios.post(URL+'driver/setdriverdevice',payload)
+          });
+    }
+
+    async function login(navigation) {
         setloading(true);
         console.log(username);
         console.log(password);
         // Coding Authentication
+        //await loginService.setusername(username)
+        let payload = { username: username, password: password };
+        let userlogin = await loginService.login(payload);
 
-        setTimeout(() => {
+        if (!username || !password) {
+            Alert.alert(
+                'กรุณากรอกข้อมูลให้ครบถ้วน',
+                'กรุณากรอกอีเมลล์และรหัสผ่านให้ครบถ้วน',
+            );
             setloading(false);
-            navigation.navigate('HomeDrawer');
-        }, 0);
+        }
+        console.log(userlogin);
+        if (userlogin) {
+            if (userlogin.status == 'ok') {
+                await loginService.setusername(userlogin.result.driverId);
+                setloading(false);
+                getDeviceInfo(userlogin.result.driverId);
+                navigation.navigate('HomeDrawer');
+            } else {
+                Alert.alert(
+                    'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง',
+                    'กรุณาตรวจสอบชื่อผู้ใช้หรือรหัสผ่าน',
+                );
+                setloading(false);
+            }
+        } else {
+            Alert.alert(
+                'ไม่สามารถเชื่อมต่อเชิฟเวอร์ได้',
+                'กรุณาตรวจสอบเครือข่ายของคุณและลองใหม่อีกครั้ง',
+            );
+            setloading(false);
+        }
     }
 
     return (

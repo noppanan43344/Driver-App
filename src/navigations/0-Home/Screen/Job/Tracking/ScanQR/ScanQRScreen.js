@@ -8,6 +8,7 @@ import Axios from 'axios';
 import { URL } from '@utils/config';
 export default function ScanQRScreen(props) {
     // var track = 'ABCD-123-00-TH1';
+    console.log(props);
     let { orderNumber, orderid } = props.route.params;
     const errorAlert = () =>{
         Alert.alert(
@@ -19,6 +20,7 @@ export default function ScanQRScreen(props) {
     const updateStatusOrder = async(qrId) =>{
         const { data } = await Axios.post(URL + 'driver/comfirm',{orderId:orderid,orderNumber:qrId});
         console.log(data);
+        return data.status
     }
     const successAlert = () =>{   
         Alert.alert(
@@ -28,14 +30,14 @@ export default function ScanQRScreen(props) {
               {cancelable: false},
         );
     }
-    const onSuccess = (e) => {
+    const onSuccess = async (e) => {
         console.log("orderid"+orderid+"orderNumber"+orderNumber);
         console.log(e.data);
         if (orderNumber == e.data) {
             successAlert()
-            updateStatusOrder(e.data)
+            let status = await updateStatusOrder(e.data)
             //props.navigation.goBack()
-            props.navigation.navigate('SingUpScreen');
+            props.navigation.navigate('SingUpScreen',{status:status});
         } else {
             errorAlert();
             console.log('error');
